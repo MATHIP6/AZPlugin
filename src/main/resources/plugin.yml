@@ -1,0 +1,10 @@
+name: AZPlugin
+version: '${project.version}'
+main: fr.mathip.azplugin.Main
+author: MATHIP6
+commands:
+  az:
+    description: commande du plugin.
+    permission: azplugin.*
+    permission-message: §cVous n'avez pas la permission d'utiliser cette commande !
+

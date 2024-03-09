@@ -1,0 +1,11 @@
+attack_cooldown: false  #Activer/Désactiver le cooldown des attaques.
+player_push: false #Activer/Désactiver le fait que les joueurs se poussent entre eux.
+large_hitbox: true #Activer/Désactiver les hitboxs larges (comme en 1.8).
+sword_blocking: false #Activer/Désactiver la parade avec l'épée (pour que ça fonctionne sur un serveur 1.9 il faudra modifier son code).
+hit_and_block: false #Activer/Désactiver le hit-and-block.
+old_enchantments: false #Activer/Désactiver l'ancienne interface d'enchantement (comme en 1.8).
+pvp_hit_priority: false #Activer/Désactiver le fait de donner la priorité au PVP lors des coups (ex: une entité sera ciblée en priorité plutôt qu'une herbe haute).
+see_chunks: false #Activer/Désactiver la vision des chunks (le chunk actuel est plus brillant).
+sidebar_scores: false #Activer/Désactiver les scores dans la sidebar du scoreboard (les nombres en rouge).
+smooth_experience_bar: false #Activer/Désactiver l'animation lissée de la barre d'expérience.
+sort_tab_list_by_names: false #Activer/Désactiver le trie de la tab-list en fonction du display-name des joueurs.

@@ -1,0 +1,6 @@
+fr\mathip\azplugin\commands\AzCommand.class
+fr\mathip\azplugin\commands\AZTabComplete.class
+fr\mathip\azplugin\Main.class
+fr\mathip\azplugin\AZListener$1.class
+fr\mathip\azplugin\AZListener.class
+fr\mathip\azplugin\Main$1.class
