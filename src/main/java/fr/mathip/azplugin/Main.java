@@ -12,7 +12,9 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public final class Main extends JavaPlugin {
@@ -37,6 +39,8 @@ public final class Main extends JavaPlugin {
     public boolean smoothExperienceBar;
     public boolean sortTabListByName;
 
+    public ArrayList<String> joinWithAZCommands;
+    public ArrayList<String> joinWithoutAZCommands;
 
 
 
@@ -46,13 +50,15 @@ public final class Main extends JavaPlugin {
 
     @Override
     public void onEnable() {
+        Metrics metrics = new Metrics(this, 21554);
         instance = this;
-        //saveDefaultConfig();
+        saveDefaultConfig();
         initConfig();
         //System.out.println(getConfig().getBoolean("attack_cooldown"));
         getCommand("az").setExecutor(new AzCommand());
         getCommand("az").setTabCompleter(new AZTabComplete());
         Bukkit.getPluginManager().registerEvents(new AZListener(), this);
+        joinWithoutAZCommands = new ArrayList<>();
         playersScale = new HashMap<>();
         playersOpacity = new HashMap<>();
         playersTag = new HashMap<>();
@@ -85,6 +91,10 @@ public final class Main extends JavaPlugin {
     }
 
     public void initConfig() {
+        joinWithAZCommands = (ArrayList<String>) getConfig().get("join-with-az-commands");
+        joinWithoutAZCommands = (ArrayList<String>) getConfig().get("join-without-az-commands");
+
+
         attackCooldown = getConfig().getBoolean("attack_cooldown");
         playerPush = getConfig().getBoolean("player_push");
         largeHitBox = getConfig().getBoolean("large_hitbox");

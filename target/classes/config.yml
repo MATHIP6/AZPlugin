@@ -1,3 +1,11 @@
+join-with-az-commands:
+  - "give %player% golden_apple"
+  - "tellraw %player% §6Hey, t'utilise le AZ Launcher !"
+
+join-without-az-commands:
+  - "give %player% dirt"
+
+
 attack_cooldown: false  #Activer/Désactiver le cooldown des attaques.
 player_push: false #Activer/Désactiver le fait que les joueurs se poussent entre eux.
 large_hitbox: true #Activer/Désactiver les hitboxs larges (comme en 1.8).

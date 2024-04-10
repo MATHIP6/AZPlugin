@@ -34,7 +34,7 @@ public class AzCommand implements CommandExecutor {
             if (commandSender instanceof Player) p = (Player) commandSender;
             else p = null;
             if (args.length == 0){
-                commandSender.sendMessage("§ccheck, list, size, model, opacity, worldenv, vignette, tag, item");
+                commandSender.sendMessage("§ccheck, list, size, model, opacity, worldenv, vignette, tag, item, reload");
             } else if (args[0].equalsIgnoreCase("list")) {
                 List<String> pactifyList = new ArrayList<>();
                 List<String> vanillaList = new ArrayList<>();
@@ -47,13 +47,13 @@ public class AzCommand implements CommandExecutor {
                 }
                 pactifyList.sort(String::compareToIgnoreCase);
                 vanillaList.sort(String::compareToIgnoreCase);
-                commandSender.sendMessage(ChatColor.YELLOW + "Players using the Pactify Launcher: " + (
+                commandSender.sendMessage(ChatColor.YELLOW + "Les joueurs qui utilisent le AZ launcher: " + (
                         pactifyList.isEmpty() ? (ChatColor.GRAY + "(none)") : (ChatColor.GREEN + String.join(", ", (Iterable)pactifyList))));
-                commandSender.sendMessage(ChatColor.YELLOW + "Players not using the Pactify Launcher: " + (
+                commandSender.sendMessage(ChatColor.YELLOW + "Les joueurs qui n'utilisent pas le AZ launcher: " + (
                         vanillaList.isEmpty() ? (ChatColor.GRAY + "(none)") : (ChatColor.RED + String.join(", ", (Iterable)vanillaList))));
 
             } else if (args[0].equalsIgnoreCase("reload")) {
-                main.initConfig();
+                Main.getInstance().initConfig();
                 for (Player pl : Bukkit.getOnlinePlayers()){
                     if (AZPlayer.hasAZLauncher(pl)){
                         PacketConfFlag.setFlag(pl, PLSPConfFlag.ATTACK_COOLDOWN, main.attackCooldown);
@@ -78,11 +78,11 @@ public class AzCommand implements CommandExecutor {
                 }
                 Player player = Bukkit.getPlayer(args[1]);
                 if (player == null) {
-                    commandSender.sendMessage(ChatColor.RED + "Player " + args[0] + " is not online");
+                    commandSender.sendMessage(ChatColor.RED + "Ce joueur est hors ligne");
                     return true;
                 }
-                commandSender.sendMessage(ChatColor.YELLOW + "Player " + player.getName() + " is " + (
-                        AZPlayer.hasAZLauncher(player) ? (ChatColor.GREEN + "using") : (ChatColor.RED + "not using")) + ChatColor.YELLOW + " the Pactify Launcher");
+                commandSender.sendMessage(ChatColor.YELLOW + player.getName() + (
+                        AZPlayer.hasAZLauncher(player) ? (ChatColor.GREEN + " utilise") : (ChatColor.RED + " n'utilise pas")) + ChatColor.YELLOW + " le AZ launcher");
 
             } else if (commandSender instanceof Player) {
                 if (args[0].equalsIgnoreCase("size")){
@@ -126,6 +126,7 @@ public class AzCommand implements CommandExecutor {
                             if (args[1].equalsIgnoreCase("reset")){
                                 if (main.playersModel.containsKey(Bukkit.getPlayer(args[2]))){
                                     main.playersModel.remove(Bukkit.getPlayer(args[2]));
+                                    PacketPlayerModel.resetPlayerModel(Bukkit.getPlayer(args[2]));
                                 }
                                 p.sendMessage("§achangement de skin effectué !");
                                 return true;
@@ -149,6 +150,7 @@ public class AzCommand implements CommandExecutor {
                         if (args[1].equalsIgnoreCase("reset")){
                             if (main.playersModel.containsKey(p)){
                                 main.playersModel.remove(p);
+                                PacketPlayerModel.resetPlayerModel(p);
                             }
                             p.sendMessage("§achangement de skin effectué !");
                             return true;
