@@ -1,6 +1,6 @@
 join-with-az-commands:
   - "give %player% golden_apple"
-  - "tellraw %player% §6Hey, t'utilise le AZ Launcher !"
+  - "tellraw %player% §6Salut"
 
 join-without-az-commands:
   - "give %player% dirt"

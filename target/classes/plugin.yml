@@ -1,5 +1,5 @@
 name: AZPlugin
-version: '1.0-SNAPSHOT'
+version: '1.1'
 main: fr.mathip.azplugin.Main
 author: MATHIP6
 commands:
