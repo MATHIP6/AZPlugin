@@ -1,9 +1,9 @@
 join-with-az-commands:
-  - "give %player% golden_apple"
-  - "tellraw %player% §6Hey, t'utilise le AZ Launcher !"
+  #- "give %player% golden_apple"
+  #- "tellraw %player% §6Hey ! Vous utilisez le AZ Launcher"
 
 join-without-az-commands:
-  - "give %player% dirt"
+  #- "give %player% dirt"
 
 
 attack_cooldown: false  #Activer/Désactiver le cooldown des attaques.
@@ -17,3 +17,9 @@ see_chunks: false #Activer/Désactiver la vision des chunks (le chunk actuel est
 sidebar_scores: false #Activer/Désactiver les scores dans la sidebar du scoreboard (les nombres en rouge).
 smooth_experience_bar: false #Activer/Désactiver l'animation lissée de la barre d'expérience.
 sort_tab_list_by_names: false #Activer/Désactiver le trie de la tab-list en fonction du display-name des joueurs.
+server_side_anvil: false
+pistons_retract_entities: false
+hit_indicator: false
+
+chat_message_max_size: 100
+max_build_height: 256

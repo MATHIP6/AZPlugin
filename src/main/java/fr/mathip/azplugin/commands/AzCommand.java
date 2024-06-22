@@ -1,23 +1,23 @@
 package fr.mathip.azplugin.commands;
 
+import de.tr7zw.changeme.nbtapi.NBTContainer;
+import de.tr7zw.changeme.nbtapi.NBTItem;
 import fr.mathip.azplugin.Main;
-import fr.speccy.azclientapi.bukkit.AZClientPlugin;
-import fr.speccy.azclientapi.bukkit.AZManager;
 import fr.speccy.azclientapi.bukkit.AZPlayer;
 import fr.speccy.azclientapi.bukkit.handlers.PLSPConfFlag;
+import fr.speccy.azclientapi.bukkit.handlers.PLSPConfInt;
 import fr.speccy.azclientapi.bukkit.handlers.PLSPPlayerModel;
 import fr.speccy.azclientapi.bukkit.handlers.PLSPWorldEnv;
-import fr.speccy.azclientapi.bukkit.packets.*;
+import fr.speccy.azclientapi.bukkit.packets.player.*;
+import fr.speccy.azclientapi.bukkit.utils.AZColor;
 import fr.thebatteur.items.AZItem;
-import fr.thebatteur.items.handlers.Sprite;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
+import pactify.client.api.plsp.packet.client.PLSPPacketPlayerMeta;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,12 +30,13 @@ public class AzCommand implements CommandExecutor {
 
             Main main = Main.getInstance();
 
-            Player p;
-            if (commandSender instanceof Player) p = (Player) commandSender;
-            else p = null;
             if (args.length == 0){
-                commandSender.sendMessage("§ccheck, list, size, model, opacity, worldenv, vignette, tag, item, reload");
+                commandSender.sendMessage("§ccheck, list, size, model, opacity, worldenv, vignette, tag, itemrender, reload, seechunks, subtag, suptag");
             } else if (args[0].equalsIgnoreCase("list")) {
+                if (!commandSender.hasPermission("azplugin.command.list")) {
+                    commandSender.sendMessage("§cErreur: Vous n'avez pas la permission d'utilisez cette commande !");
+                    return true;
+                }
                 List<String> pactifyList = new ArrayList<>();
                 List<String> vanillaList = new ArrayList<>();
                 for (Player player : Bukkit.getOnlinePlayers()) {
@@ -48,278 +49,384 @@ public class AzCommand implements CommandExecutor {
                 pactifyList.sort(String::compareToIgnoreCase);
                 vanillaList.sort(String::compareToIgnoreCase);
                 commandSender.sendMessage(ChatColor.YELLOW + "Les joueurs qui utilisent le AZ launcher: " + (
-                        pactifyList.isEmpty() ? (ChatColor.GRAY + "(none)") : (ChatColor.GREEN + String.join(", ", (Iterable)pactifyList))));
+                        pactifyList.isEmpty() ? (ChatColor.GRAY + "(Aucun)") : (ChatColor.GREEN + String.join(", ", (Iterable)pactifyList))));
                 commandSender.sendMessage(ChatColor.YELLOW + "Les joueurs qui n'utilisent pas le AZ launcher: " + (
-                        vanillaList.isEmpty() ? (ChatColor.GRAY + "(none)") : (ChatColor.RED + String.join(", ", (Iterable)vanillaList))));
+                        vanillaList.isEmpty() ? (ChatColor.GRAY + "(Aucun)") : (ChatColor.RED + String.join(", ", (Iterable)vanillaList))));
 
             } else if (args[0].equalsIgnoreCase("reload")) {
+                if (!commandSender.hasPermission("azplugin.command.reload")) {
+                    commandSender.sendMessage("§cErreur: Vous n'avez pas la permission d'utilisez cette commande !");
+                    return true;
+                }
                 Main.getInstance().initConfig();
                 for (Player pl : Bukkit.getOnlinePlayers()){
                     if (AZPlayer.hasAZLauncher(pl)){
-                        PacketConfFlag.setFlag(pl, PLSPConfFlag.ATTACK_COOLDOWN, main.attackCooldown);
-                        PacketConfFlag.setFlag(pl, PLSPConfFlag.PLAYER_PUSH, main.playerPush);
-                        PacketConfFlag.setFlag(pl, PLSPConfFlag.LARGE_HITBOX, main.largeHitBox);
-                        PacketConfFlag.setFlag(pl, PLSPConfFlag.SWORD_BLOCKING, main.swordBlocking);
-                        PacketConfFlag.setFlag(pl, PLSPConfFlag.HIT_AND_BLOCK, main.hitAndBlock);
-                        PacketConfFlag.setFlag(pl, PLSPConfFlag.OLD_ENCHANTEMENTS, main.oldEnchantments);
-                        PacketConfFlag.setFlag(pl, PLSPConfFlag.SIDEBAR_SCORES, main.sidebarScore);
-                        PacketConfFlag.setFlag(pl, PLSPConfFlag.PVP_HIT_PRIORITY, main.pvpHitPriority);
-                        PacketConfFlag.setFlag(pl, PLSPConfFlag.SEE_CHUNKS, main.seeChunks);
-                        PacketConfFlag.setFlag(pl, PLSPConfFlag.SMOOTH_EXPERIENCE_BAR, main.smoothExperienceBar);
-                        PacketConfFlag.setFlag(pl, PLSPConfFlag.SORT_TAB_LIST_BY_NAMES, main.sortTabListByName);
+                        PacketConf.setFlag(pl, PLSPConfFlag.ATTACK_COOLDOWN, main.attackCooldown);
+                        PacketConf.setFlag(pl, PLSPConfFlag.PLAYER_PUSH, main.playerPush);
+                        PacketConf.setFlag(pl, PLSPConfFlag.LARGE_HITBOX, main.largeHitBox);
+                        PacketConf.setFlag(pl, PLSPConfFlag.SWORD_BLOCKING, main.swordBlocking);
+                        PacketConf.setFlag(pl, PLSPConfFlag.HIT_AND_BLOCK, main.hitAndBlock);
+                        PacketConf.setFlag(pl, PLSPConfFlag.OLD_ENCHANTEMENTS, main.oldEnchantments);
+                        PacketConf.setFlag(pl, PLSPConfFlag.SIDEBAR_SCORES, main.sidebarScore);
+                        PacketConf.setFlag(pl, PLSPConfFlag.PVP_HIT_PRIORITY, main.pvpHitPriority);
+                        PacketConf.setFlag(pl, PLSPConfFlag.SEE_CHUNKS, main.seeChunks);
+                        PacketConf.setFlag(pl, PLSPConfFlag.SMOOTH_EXPERIENCE_BAR, main.smoothExperienceBar);
+                        PacketConf.setFlag(pl, PLSPConfFlag.SORT_TAB_LIST_BY_NAMES, main.sortTabListByName);
+
+                        PacketConf.setFlag(pl, PLSPConfFlag.SERVER_SIDE_ANVIL, main.serverSideAnvil);
+                        PacketConf.setFlag(pl, PLSPConfFlag.PISTONS_RETRACT_ENTITIES, main.pistonRetractEnvities);
+                        PacketConf.setFlag(pl, PLSPConfFlag.HIT_INDICATOR, main.hitIndicator);
+
+                        PacketConf.setInt(pl, PLSPConfInt.CHAT_MESSAGE_MAX_SIZE, main.chatMaxMessageSize);
+                        PacketConf.setInt(pl, PLSPConfInt.MAX_BUILD_HEIGHT, main.maxBuildHeight);
                     }
                 }
                 commandSender.sendMessage("§aLe plugin a reload !");
 
             } else if (args[0].equalsIgnoreCase("check")) {
-                if (args.length == 0) {
-                    commandSender.sendMessage(ChatColor.RED + "Usage: /az <player>");
+                if (!commandSender.hasPermission("azplugin.command.checkt")) {
+                    commandSender.sendMessage("§cErreur: Vous n'avez pas la permission d'utilisez cette commande !");
+                    return true;
+                }
+                if (args.length == 1) {
+                    commandSender.sendMessage(ChatColor.RED + "/az check <joueur>");
                     return true;
                 }
                 Player player = Bukkit.getPlayer(args[1]);
                 if (player == null) {
-                    commandSender.sendMessage(ChatColor.RED + "Ce joueur est hors ligne");
+                    commandSender.sendMessage(ChatColor.RED + "Erreur: Ce joueur est hors ligne");
                     return true;
                 }
                 commandSender.sendMessage(ChatColor.YELLOW + player.getName() + (
                         AZPlayer.hasAZLauncher(player) ? (ChatColor.GREEN + " utilise") : (ChatColor.RED + " n'utilise pas")) + ChatColor.YELLOW + " le AZ launcher");
-
-            } else if (commandSender instanceof Player) {
-                if (args[0].equalsIgnoreCase("size")){
-                    if (args.length >= 3){
-                        if (Bukkit.getPlayer(args[2]) != null){
-                            try {
-                                Float size = Float.parseFloat(args[1]);
-                                if (main.playersScale.containsKey(Bukkit.getPlayer(args[2]))){
-                                    main.playersScale.replace(Bukkit.getPlayer(args[2]), size);
-                                } else {
-                                    main.playersScale.put(Bukkit.getPlayer(args[2]), size);
-                                }
-                                //PacketEntityMeta.setPlayerScale(Bukkit.getPlayer(args[2]), size, size, size, size, size, true);
-                                commandSender.sendMessage("§achangement de taille effectué !");
-                            } catch (NumberFormatException e) {
-                                commandSender.sendMessage("§cErreur : La taille n'est pas un nombre valide.");
-                            }
-                        } else {
-                            commandSender.sendMessage("§cCe joueur est hors-ligne !");
-                        }
-                    } else if (args.length == 2){
+            }else if (args[0].equalsIgnoreCase("size")){
+                if (!commandSender.hasPermission("azplugin.command.size")) {
+                    commandSender.sendMessage("§cErreur: Vous n'avez pas la permission d'utilisez cette commande !");
+                    return true;
+                }
+                if (args.length > 2) {
+                    if (Bukkit.getPlayer(args[1]) != null) {
+                        Player target = Bukkit.getPlayer(args[1]);
                         try {
-                            Float size = Float.parseFloat(args[1]);
-                            if (main.playersScale.containsKey(p)){
-                                main.playersScale.replace(p, size);
-                            } else {
-                                main.playersScale.put(p, size);
+                            Float size = Float.parseFloat(args[2]);
+                            if (size == 1) {
+                                if (main.playersScale.containsKey(target)) {
+                                    main.playersScale.remove(target);
+                                }
+                                PacketPlayerScale.reset(target);
                             }
-                            //PacketEntityMeta.setPlayerScale(p, size, size, size, size, size, true);
+                            if (main.playersScale.containsKey(target)) {
+                                main.playersScale.replace(target, size);
+                            } else {
+                                main.playersScale.put(target, size);
+                            }
+                            //PacketEntityMeta.setPlayerScale(Bukkit.getPlayer(args[2]), size, size, size, size, size, true);
                             commandSender.sendMessage("§achangement de taille effectué !");
                         } catch (NumberFormatException e) {
                             commandSender.sendMessage("§cErreur : La taille n'est pas un nombre valide.");
                         }
                     } else {
-                        commandSender.sendMessage("/az size <size> [player]");
+                        commandSender.sendMessage("§cCe joueur est hors-ligne !");
                     }
-
-                } else if (args[0].equalsIgnoreCase("model")) {
-                    if (args.length >= 3){
-                        if (Bukkit.getPlayer(args[2]) != null){
-                            if (args[1].equalsIgnoreCase("reset")){
-                                if (main.playersModel.containsKey(Bukkit.getPlayer(args[2]))){
-                                    main.playersModel.remove(Bukkit.getPlayer(args[2]));
-                                    PacketPlayerModel.resetPlayerModel(Bukkit.getPlayer(args[2]));
-                                }
-                                p.sendMessage("§achangement de skin effectué !");
-                                return true;
+                } else {
+                    commandSender.sendMessage("§c/az size <joueur> <taille>");
+                }
+            } else if (args[0].equalsIgnoreCase("model")) {
+                if (!commandSender.hasPermission("azplugin.command.model")) {
+                    commandSender.sendMessage("§cErreur: Vous n'avez pas la permission d'utilisez cette commande !");
+                    return true;
+                }
+                if (args.length > 2){
+                    if (Bukkit.getPlayer(args[1]) != null){
+                        Player target = Bukkit.getPlayer(args[1]);
+                        if (args[2].equalsIgnoreCase("reset")){
+                            if (main.playersModel.containsKey(target)){
+                                main.playersModel.remove(target);
+                                PacketPlayerModel.reset(target);
                             }
-                            try {
-                                PLSPPlayerModel plspPlayerModel = PLSPPlayerModel.valueOf(args[1].toUpperCase());
-                                if (main.playersModel.containsKey(Bukkit.getPlayer(args[2]))){
-                                    main.playersModel.replace(Bukkit.getPlayer(args[2]), plspPlayerModel);
-                                } else {
-                                    main.playersModel.put(Bukkit.getPlayer(args[2]), plspPlayerModel);
-                                }
-                                //PacketPlayerModel.setPlayerModel(Bukkit.getPlayer(args[2]), id);
-                                p.sendMessage("§achangement de skin effectué !");
-                            } catch (IllegalArgumentException e){
-                                p.sendMessage("§cErreur : La valeur est invalide !.");
-                            }
-                        } else {
-                            p.sendMessage("§cCe joueur est hors-ligne !");
-                        }
-                    } else if (args.length == 2){
-                        if (args[1].equalsIgnoreCase("reset")){
-                            if (main.playersModel.containsKey(p)){
-                                main.playersModel.remove(p);
-                                PacketPlayerModel.resetPlayerModel(p);
-                            }
-                            p.sendMessage("§achangement de skin effectué !");
+                            commandSender.sendMessage("§achangement de skin effectué !");
                             return true;
                         }
-
                         try {
-                            PLSPPlayerModel plspPlayerModel = PLSPPlayerModel.valueOf(args[1].toUpperCase());
-                            if (main.playersModel.containsKey(p)){
-                                main.playersModel.replace(p, plspPlayerModel);
+                            PLSPPlayerModel plspPlayerModel = PLSPPlayerModel.valueOf(args[2].toUpperCase());
+                            if (main.playersModel.containsKey(target)){
+                                main.playersModel.replace(target, plspPlayerModel);
                             } else {
-                                main.playersModel.put(p, plspPlayerModel);
+                                main.playersModel.put(target, plspPlayerModel);
                             }
-                            //PacketPlayerModel.setPlayerModel(p, id);
-                            p.sendMessage("§achangement de skin effectué !");
+                            //PacketPlayerModel.setPlayerModel(Bukkit.getPlayer(args[2]), id);
+                            commandSender.sendMessage("§achangement de skin effectué !");
                         } catch (IllegalArgumentException e){
-                            p.sendMessage("§cErreur : La valeur est invalide !.");
+                            commandSender.sendMessage("§cErreur : La valeur est invalide !.");
                         }
                     } else {
-                        p.sendMessage("§c/az model <id> [player]");
+                        commandSender.sendMessage("§cCe joueur est hors-ligne !");
                     }
-
-                } else if (args[0].equalsIgnoreCase("opacity")) {
-                    if (args.length >= 3){
-                        if (Bukkit.getPlayer(args[2]) != null){
-                            try {
-                                Float opacity = Float.parseFloat(args[1]);
-                                if (main.playersOpacity.containsKey(Bukkit.getPlayer(args[2]))){
-                                    main.playersOpacity.replace(Bukkit.getPlayer(args[2]), opacity);
+                } else {
+                    commandSender.sendMessage("§c/az model <joueur> <model> ou reset");
+                }
+            } else if (args[0].equalsIgnoreCase("opacity")) {
+                if (!commandSender.hasPermission("azplugin.command.opacity")) {
+                    commandSender.sendMessage("§cErreur: Vous n'avez pas la permission d'utilisez cette commande !");
+                    return true;
+                }
+                if (args.length >= 2){
+                    if (Bukkit.getPlayer(args[1]) != null){
+                        Player target = Bukkit.getPlayer(args[1]);
+                        try {
+                            Float opacity = Float.parseFloat(args[2]);
+                            if (opacity == -1) {
+                                if (main.playersOpacity.containsKey(target)) {
+                                    main.playersOpacity.remove(target);
+                                }
+                                PacketPlayerOpacity.resetPlayer(target);
+                                PacketPlayerOpacity.resetNameTag(target);
+                                PacketPlayerOpacity.resetSneakNameTag(target);
+                            }
+                            if (opacity <= 1 && opacity >= -1) {
+                                if (main.playersOpacity.containsKey(target)){
+                                    main.playersOpacity.replace(target, opacity);
                                 } else {
-                                    main.playersOpacity.put(Bukkit.getPlayer(args[2]), opacity);
+                                    main.playersOpacity.put(target, opacity);
                                 }
                                 //PacketEntityMeta.setPlayerOpacity(Bukkit.getPlayer(args[2]), opacity);
                                 //PacketEntityMeta.setNameTagOpacity(Bukkit.getPlayer(args[2]), opacity);
                                 //PacketEntityMeta.setSneakNameTagOpacity(Bukkit.getPlayer(args[2]), opacity);
-                                p.sendMessage("§achangement de d'opacité effectué !");
-                            } catch (NumberFormatException e){
-                                p.sendMessage("§cErreur : La valeur est invalide !.");
-                            }
-                        } else {
-                            p.sendMessage("§cCe joueur est hors-ligne !");
-                        }
-                    } else if (args.length == 2){
-                        try {
-                            Float opacity = Float.parseFloat(args[1]);
-                            if (main.playersOpacity.containsKey(p)){
-                                main.playersOpacity.replace(p, opacity);
+                                commandSender.sendMessage("§achangement de d'opacité effectué !");
                             } else {
-                                main.playersOpacity.put(p, opacity);
+                                commandSender.sendMessage("§cErreur: Vous devez mettre une valeur entre -1 et 1 !");
                             }
-                            //PacketEntityMeta.setPlayerOpacity(p, opacity);
-                            //PacketEntityMeta.setNameTagOpacity(p, opacity);
-                            //PacketEntityMeta.setSneakNameTagOpacity(p, opacity);
-                            p.sendMessage("§achangement de d'opacité effectué !");
                         } catch (NumberFormatException e){
-                            p.sendMessage("§cErreur : La valeur est invalide !.");
+                            commandSender.sendMessage("§cErreur : La valeur est invalide !.");
                         }
                     } else {
-                        p.sendMessage("/az opacity <velue> [player]");
+                        commandSender.sendMessage("§cCe joueur est hors-ligne !");
                     }
-
-                } else if (args[0].equalsIgnoreCase("worldenv")) {
-                    if (args.length >= 2){
-                        if (args[1].equals("NORMAL") || args[1].equals("NETHER") || args[1].equals("THE_END")){
-                            for (Player pl : Bukkit.getOnlinePlayers()) {
-                                PacketWorldEnv.setWorldEnv(pl, PLSPWorldEnv.valueOf(args[1]));
-                            }
-                            p.sendMessage("§achangement de d'environnement effectué !");
-                        } else {
-                            p.sendMessage("§cErreur : La valeur est invalide !.");
+                } else {
+                    commandSender.sendMessage("§c/az opacity <joueur> <opacité>");
+                }
+            } else if (args[0].equalsIgnoreCase("worldenv")) {
+                if (!commandSender.hasPermission("azplugin.command.worldenv")) {
+                    commandSender.sendMessage("§cErreur: Vous n'avez pas la permission d'utilisez cette commande !");
+                    return true;
+                }
+                if (args.length >= 2){
+                    if (args[1].equals("NORMAL") || args[1].equals("NETHER") || args[1].equals("THE_END")){
+                        for (Player pl : Bukkit.getOnlinePlayers()) {
+                            PacketWorldEnv.setEnv(pl, PLSPWorldEnv.valueOf(args[1]));
                         }
+                        commandSender.sendMessage("§achangement de d'environnement effectué !");
                     } else {
-                        p.sendMessage("/az worldenv <NORMAL, NETHER, THE_END> [player]");
+                        commandSender.sendMessage("§cErreur : La valeur est invalide !.");
                     }
-                } else if (args[0].equalsIgnoreCase("vignette")) {
-                    if (args.length >= 2 && args[1].equalsIgnoreCase("reset")){
-                        if (args.length >= 3 && Bukkit.getPlayer(args[2]) != null){
-                            PacketVignette.resetVignette(Bukkit.getPlayer(args[2]));
-                            p.sendMessage("§achangement de d'environnement effectué !");
+                } else {
+                    commandSender.sendMessage("§c/az worldenv <NORMAL, NETHER, THE_END>");
+                }
+            } else if (args[0].equalsIgnoreCase("vignette")) {
+                if (!commandSender.hasPermission("azplugin.command.vignette")) {
+                    commandSender.sendMessage("§cErreur: Vous n'avez pas la permission d'utilisez cette commande !");
+                    return true;
+                }
+                if (args.length >= 3){
+                    if (Bukkit.getPlayer(args[1]) != null){
+                        Player target = Bukkit.getPlayer(args[1]);
+                        if (args[2].equalsIgnoreCase("reset")) {
+                            PacketVignette.reset(target);
+                            commandSender.sendMessage("§achangement de d'environnement effectué !");
                             return true;
                         }
-                        PacketVignette.resetVignette(p);
-                        p.sendMessage("§achangement de d'environnement effectué !");
-                    }
-                    if (args.length >= 5) {
-                        if (Bukkit.getPlayer(args[4]) != null){
+                        if (args.length >= 5) {
                             try {
-                                int red = Integer.parseInt(args[1]);
-                                int green = Integer.parseInt(args[2]);
-                                int blue = Integer.parseInt(args[3]);
-                                PacketVignette.setVignette(Bukkit.getPlayer(args[4]), red, green, blue);
-                                p.sendMessage("§achangement de d'environnement effectué !");
+                                int red = Integer.parseInt(args[2]);
+                                int green = Integer.parseInt(args[3]);
+                                int blue = Integer.parseInt(args[4]);
+                                PacketVignette.setColor(target, red, green, blue);
+                                commandSender.sendMessage("§achangement de d'environnement effectué !");
                             } catch (NumberFormatException e){
-                                p.sendMessage("§cErreur : Les valeur est invalide !.");
+                                commandSender.sendMessage("§cErreur : Les valeur est invalide !.");
                             }
                         } else {
-                            p.sendMessage("§cCe joueur est hors-ligne !");
-                        }
-                    } else if (args.length == 4){
-                        try {
-                            int red = Integer.parseInt(args[1]);
-                            int green = Integer.parseInt(args[2]);
-                            int blue = Integer.parseInt(args[3]);
-                            PacketVignette.setVignette(p, red, green, blue);
-                            p.sendMessage("§achangement de d'environnement effectué !");
-                        } catch (NumberFormatException e){
-                            p.sendMessage("§cErreur : Les valeur est invalide !.");
+                            commandSender.sendMessage("§c/az vignette <joueur> (<red> <green> <blue>) ou reset");
+                            commandSender.sendMessage("§aVous pouvez utiliser ce site pour faire des couleurs RGB https://htmlcolorcodes.com/fr/");
                         }
                     } else {
-                        p.sendMessage("/az vignette <red> <green> <blue> [player]");
+                        commandSender.sendMessage("§cCe joueur est hors-ligne !");
                     }
-                } else if (args[0].equalsIgnoreCase("tag")) {
-                    if (args.length >= 3){
-                        if (Bukkit.getPlayer(args[2]) != null){
-                            Player target = Bukkit.getPlayer(args[2]);
-                            if (main.playersTag.containsKey(target)){
-                                main.playersTag.replace(target, args[1]);
-                            } else {
-                                main.playersTag.put(target, args[1]);
-                            }
-                            //PacketEntityMeta.setNameTag(target, args[1]);
-                            p.sendMessage("§achangement de d'environnement effectué !");
-                        } else {
-                            p.sendMessage("§cCe joueur est hors-ligne !");
-                        }
-                    } else if (args.length == 2){
-                        //PacketEntityMeta.setNameTag(p, args[1]);
-                        if (main.playersTag.containsKey(p)){
-                            main.playersTag.replace(p, args[1]);
-                        } else {
-                            main.playersTag.put(p, args[1]);
-                        }
-                        p.sendMessage("§achangement de d'environnement effectué !");
-                    } else {
-                        p.sendMessage("/az tag <name> [player]");
-                    }
-                } else if (args[0].equalsIgnoreCase("item")) {
-                    if (args.length == 1){
-                        p.sendMessage("§c/az item render");
-                        return true;
-                    }
-                    if (args[1].equalsIgnoreCase("render")){
-                        if (args.length >= 4){
-                            try {
-                                AZItem azItem = new AZItem(p.getItemInHand());
-                                azItem.addPacDisplay(new AZItem.PacDisplay().setColor(AZManager.getColor(args[3])));
-                                azItem.addPacRender(new AZItem.PacRender().setColor(AZManager.getColor(args[3])).setScale(Float.parseFloat(args[2])));
-                                p.setItemInHand(azItem.getItemStack());
-                            } catch (NumberFormatException e){
-                                p.sendMessage("§cErreur : Les valeur est invalide !.");
-                            }
-                        } else if (args.length == 3) {
-                            try {
-                                AZItem azItem = new AZItem(p.getItemInHand());
-                                azItem.addPacRender(new AZItem.PacRender().setScale(Float.parseFloat(args[2])));
-                                p.setItemInHand(azItem.getItemStack());
-                            } catch (NumberFormatException e){
-                                p.sendMessage("§cErreur : Les valeur est invalide !.");
-                            }
-                        } else {
-                            p.sendMessage("§c/az item render <scale> [color(Hex)]");
-                        }
-                    }
+                } else {
+                    commandSender.sendMessage("§c/az vignette <joueur> (<red> <green> <blue>) ou reset");
+                    commandSender.sendMessage("§aVous pouvez utiliser ce site pour faire des couleurs RGB https://htmlcolorcodes.com/fr/");
                 }
-
+            } else if (args[0].equalsIgnoreCase("tag")) {
+                if (!commandSender.hasPermission("azplugin.command.tag")) {
+                    commandSender.sendMessage("§cErreur: Vous n'avez pas la permission d'utilisez cette commande !");
+                    return true;
+                }
+                if (args.length > 2){
+                    if (Bukkit.getPlayer(args[1]) != null){
+                        Player target = Bukkit.getPlayer(args[1]);
+                        /*if (args[2].equalsIgnoreCase("reset")) {
+                              if (main.playersTag.containsKey(target)) {
+                                    main.playersTag.remove(target);
+                                    commandSender.sendMessage("§aTag supprimé !");
+                                }
+                                return true;
+                            }*/
+                        StringBuilder sb = new StringBuilder();
+                        int count = 0;
+                        sb.append(args[2]);
+                        for (String arg : args) {
+                            if (count > 2) {
+                                sb.append(" " + arg);
+                            }
+                            count++;
+                        }
+                        if (main.playersTag.containsKey(target)){
+                            main.playersTag.replace(target, sb.toString());
+                        } else {
+                            main.playersTag.put(target, sb.toString());
+                        }
+                        commandSender.sendMessage("§atag modifié !");
+                    } else {
+                        commandSender.sendMessage("§cCe joueur est hors-ligne !");
+                    }
+                } else {
+                    commandSender.sendMessage("§c/az tag <joueur> <nom>");
+                }
+            } else if (args[0].equalsIgnoreCase("subtag")) {
+                if (!commandSender.hasPermission("azplugin.command.subtag")) {
+                    commandSender.sendMessage("§cErreur: Vous n'avez pas la permission d'utilisez cette commande !");
+                    return true;
+                }
+                if (args.length > 2){
+                    if (Bukkit.getPlayer(args[1]) != null){
+                        Player target = Bukkit.getPlayer(args[1]);
+                        /*if (args[2].equalsIgnoreCase("reset")) {
+                               if (main.playersSubTag.containsKey(target)) {
+                                   main.playersSubTag.remove(target);
+                                    commandSender.sendMessage("§aTag supprimé !");
+                                }
+                                return true;
+                            }*/
+                        StringBuilder sb = new StringBuilder();
+                        int count = 0;
+                        sb.append(args[2]);
+                        for (String arg : args) {
+                            if (count > 2) {
+                                sb.append(" " + arg);
+                            }
+                            count++;
+                        }
+                        if (main.playersSubTag.containsKey(target)){
+                            main.playersSubTag.replace(target, sb.toString());
+                        } else {
+                            main.playersSubTag.put(target, sb.toString());
+                        }
+                        commandSender.sendMessage("§atag modifié !");
+                    } else {
+                        commandSender.sendMessage("§cCe joueur est hors-ligne !");
+                    }
+                } else {
+                    commandSender.sendMessage("§c/az subtag <joueur> <nom>");
+                }
+            } else if (args[0].equalsIgnoreCase("suptag")) {
+                if (!commandSender.hasPermission("azplugin.command.suptag")) {
+                    commandSender.sendMessage("§cErreur: Vous n'avez pas la permission d'utilisez cette commande !");
+                    return true;
+                }
+                if (args.length > 2){
+                    if (Bukkit.getPlayer(args[1]) != null){
+                        Player target = Bukkit.getPlayer(args[1]);
+                        /*if (args[2].equalsIgnoreCase("reset")) {
+                                if (main.playersSupTag.containsKey(target)) {
+                                    main.playersSupTag.remove(target);
+                                    commandSender.sendMessage("§aTag supprimé !");
+                                }
+                                return true;
+                            }*/
+                        StringBuilder sb = new StringBuilder();
+                        int count = 0;
+                        sb.append(args[2]);
+                        for (String arg : args) {
+                            if (count > 2) {
+                                sb.append(" " + arg);
+                            }
+                            count++;
+                        }
+                        if (main.playersSupTag.containsKey(target)){
+                            main.playersSupTag.replace(target, sb.toString());
+                        } else {
+                            main.playersSupTag.put(target, sb.toString());
+                        }
+                        commandSender.sendMessage("§atag modifié !");
+                    } else {
+                        commandSender.sendMessage("§cCe joueur est hors-ligne !");
+                    }
+                } else {
+                    commandSender.sendMessage("§c/az suptag <joueur> args");
+                }
+            } else if (args[0].equalsIgnoreCase("seechunks")) {
+                if (!commandSender.hasPermission("azplugin.command.seechunks")) {
+                    commandSender.sendMessage("§cErreur: Vous n'avez pas la permission d'utilisez cette commande !");
+                    return true;
+                }
+                if (args.length >= 2) {
+                    if (Bukkit.getPlayer(args[1]) != null) {
+                        Player target = Bukkit.getPlayer(args[1]);
+                        if (main.playersSeeChunks.contains(target)) {
+                            PacketConf.setFlag(target, PLSPConfFlag.SEE_CHUNKS, false);
+                        } else {
+                            PacketConf.setFlag(target, PLSPConfFlag.SEE_CHUNKS, true);
+                        }
+                    } else {
+                        commandSender.sendMessage("§cErreur: Ce joueur est hors-ligne !");
+                    }
+                } else {
+                    commandSender.sendMessage("§c/az seechunks <joueur>");
+                }
+            } else if (args[0].equalsIgnoreCase("itemrender")) {
+                if (!commandSender.hasPermission("azplugin.command.itemrender")) {
+                    commandSender.sendMessage("§cErreur: Vous n'avez pas la permission d'utilisez cette commande !");
+                    return true;
+                }
+                Player p;
+                if (commandSender instanceof Player) {
+                    p = (Player) commandSender;
+                } else {
+                    commandSender.sendMessage("§cErreur: Vous devez être un joueur pour executer cette commande !");
+                    return true;
+                }
+                if (args.length >= 3){
+                    try {
+                        /*AZItem azItem = new AZItem(p.getItemInHand());
+                        azItem.addPacDisplay(new AZItem.PacDisplay().setColor(AZColor.get0xAARRGGBB(args[3])));
+                        azItem.addPacRender(new AZItem.PacRender().setColor(AZColor.get0xAARRGGBB(args[3])).setScale(Float.parseFloat(args[2])));
+                        p.setItemInHand(azItem.getItemStack());*/
+                        NBTItem nbti = new NBTItem(p.getItemInHand());
+                        nbti.mergeCompound(new NBTContainer("{PacRender: {Scale: "+Float.parseFloat(args[1])+", Color: "+ AZColor.get0xAARRGGBB(args[2])+"}, PacDisplay: {Color: "+AZColor.get0xAARRGGBB(args[2])+"}}"));
+                        p.getItemInHand().setItemMeta(nbti.getItem().getItemMeta());
+                    } catch (NumberFormatException e){
+                        p.sendMessage("§cErreur : Les valeur est invalide !.");
+                    }
+                } else if (args.length == 2) {
+                    try {
+                        /*AZItem azItem = new AZItem(p.getItemInHand());
+                        azItem.addPacRender(new AZItem.PacRender().setScale(Float.parseFloat(args[2])));
+                        p.setItemInHand(azItem.getItemStack());*/
+                        NBTItem nbti = new NBTItem(p.getItemInHand());
+                        nbti.mergeCompound(new NBTContainer("{PacRender: {Scale: "+Float.parseFloat(args[1])+"}}"));
+                        p.getItemInHand().setItemMeta(nbti.getItem().getItemMeta());
+                    } catch (NumberFormatException e){
+                        p.sendMessage("§cErreur : Les valeur est invalide !.");
+                    }
+                } else {
+                    p.sendMessage("§c/az itemrender <taille> [couleur(Hex)]");
+                    p.sendMessage("§aVous pouvez utiliser ce site pour faire des couleurs en Hexadécimal https://htmlcolorcodes.com/fr/");
+                }
             } else {
-                commandSender.sendMessage("§cVous devez etre joueur pour executer cette commande !");
+                commandSender.sendMessage("§cErreur: Sous-commande introuvable !");
             }
-            return true;
-        }
-        return false;
+        return true;
+    }
+    return false;
     }
 }

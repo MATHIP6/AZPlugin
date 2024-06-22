@@ -6,7 +6,7 @@
 
     <groupId>fr.mathip</groupId>
     <artifactId>AZPlugin</artifactId>
-    <version>1.1</version>
+    <version>1.2</version>
     <packaging>jar</packaging>
 
     <name>AZPlugin</name>
@@ -55,6 +55,10 @@
             <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
         </repository>
         <repository>
+            <id>viaversion-repo</id>
+            <url>https://repo.viaversion.com</url>
+        </repository>
+        <repository>
             <id>sonatype</id>
             <url>https://oss.sonatype.org/content/groups/public/</url>
         </repository>
@@ -77,7 +81,18 @@
             <artifactId>AZClientAPI</artifactId>
             <version>1.0-SNAPSHOT</version> <!-- Remplacez par la dernière version. -->
             <scope>system</scope>
-            <systemPath>C:/Users/Mathis/Desktop/BuildTools/Plugins/AZClientAPI-1.8.8.jar</systemPath> <!-- Remplacez par le chemin d'accès du plugin. -->
+            <systemPath>C:/Users/Mathis/Desktop/BuildTools/Plugins/AZClientAPI-1.9.4.jar</systemPath> <!-- Remplacez par le chemin d'accès du plugin. -->
+        </dependency>
+        <dependency>
+            <groupId>com.viaversion</groupId>
+            <artifactId>viaversion</artifactId>
+            <version>LATEST</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>de.tr7zw</groupId>
+            <artifactId>item-nbt-api</artifactId>
+            <version>2.12.2</version>
         </dependency>
     </dependencies>
 </project>
