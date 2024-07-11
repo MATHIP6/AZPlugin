@@ -1,7 +1,8 @@
 name: AZPlugin
 version: '${project.version}'
-main: fr.mathip.azplugin.Main
+main: fr.mathip.azplugin.bukkit.Main
 author: MATHIP6
+softdepend: [Protocolib]
 commands:
   az:
     description: commande du plugin.
@@ -47,5 +48,7 @@ permissions:
     default: op
   azplugin.command.seechunks:
     description: Permission pour la sous-commande 1
+    default: op
+  azplugin.update:
     default: op
 

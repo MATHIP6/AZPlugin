@@ -1,0 +1,5 @@
+name: AZPlugin
+version: '${project.version}'
+description: A plugin to integrate the AZ Launcher.
+main: fr.mathip.azplugin.bungee.AZClientPlugin
+authors: MATHIP6

@@ -1,3 +1,5 @@
+update-message: true
+
 join-with-az-commands:
   #- "give %player% golden_apple"
   #- "tellraw %player% §6Hey ! Vous utilisez le AZ Launcher"
@@ -23,3 +25,5 @@ hit_indicator: false
 
 chat_message_max_size: 100
 max_build_height: 256
+
+special-transparent-inventory-character: "§" #
