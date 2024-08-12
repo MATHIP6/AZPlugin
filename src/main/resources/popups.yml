@@ -1,0 +1,36 @@
+test-alert:
+  #Il y a 3 types de popups: ALERT, CONFIRM et PROMPT
+  #Le ALERT est un menu avec du texte et un bouton pour quitter
+  type: ALERT
+  content:
+    - "Voici un exemple de popup de type alert"
+    - "Vous pouvez ajouter plusieurs lignes"
+  ok-button:
+    command: "/give %player% emerald_sword"
+
+
+test-confirm:
+  #Le CONFIRM 2 boutons pour valider ou pour annuler
+  type: CONFIRM
+  content:
+    - "Voici un exemple de popup de type confirm"
+    - "Vous pouvez ajouter plusieurs lignes"
+  ok-button:
+    command: ""
+  cancel-button:
+    command: ""
+
+test-prompt:
+  #Le PROMPT a un champ pour écrire du text à l'intérieur et on peux valider ou annuler.
+  type: PROMPT
+  content:
+    - "Voici un exemple de popup de type confirm"
+    - "Vous pouvez ajouter plusieurs lignes"
+  #On peux mettre une valeur par défaut dans le champ
+  default-value: ""
+  #Définie si c'est un champ de mot de passe ou non
+  is-password: false
+  ok-button:
+    command: "/say %value%"
+  cancel-button:
+    command: ""

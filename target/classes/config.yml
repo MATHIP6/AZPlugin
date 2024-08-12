@@ -23,7 +23,62 @@ server_side_anvil: false
 pistons_retract_entities: false
 hit_indicator: false
 
-chat_message_max_size: 100
-max_build_height: 256
+chat_message_max_size: 100 #Permet de régler la limite de caractères qu'on peut envoyer dans le tchat
+max_build_height: 256 #Permet de régler la limite de la hauteur de blocks qu'on peut poser.
 
-special-transparent-inventory-character: "§" #
+#Permet de rendre des inventaires transparent
+special-transparent-inventory-character:
+  - "§" #
+
+#Les UI boutons sont des boutons qui peuvent être dans l'inventaire ou dans le menu des paramètres
+ui-buttons:
+  gamemenu_achievements:
+    enable: true
+    text: "Boutton spécial..."
+    hover-text: "Click ici %player% :)"
+    command: "/kill %player%"
+  gamemenu_statistics:
+    enable: false
+    text: ""
+    hover-text: ""
+    command: ""
+  playerinv_cosmetic:
+    enable: false
+    text: ""
+    hover-text: ""
+    command: ""
+  playerinv_btn1:
+    enable: false
+    text: ""
+    hover-text: ""
+    command: ""
+  playerinv_btn2:
+    enable: false
+    text: ""
+    hover-text: ""
+    command: ""
+  playerinv_btn3:
+    enable: false
+    text: ""
+    hover-text: ""
+    command: ""
+  playerinv_btn4:
+    enable: false
+    text: ""
+    hover-text: ""
+    command: ""
+  playerinv_btn5:
+    enable: false
+    text: ""
+    hover-text: ""
+    command: ""
+  playerinv_btn6:
+    enable: false
+    text: ""
+    hover-text: ""
+    command: ""
+  playerinv_btn7:
+    enable: false
+    text: ""
+    hover-text: ""
+    command: ""

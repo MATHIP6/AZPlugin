@@ -1,5 +1,5 @@
 name: AZPlugin
-version: '1.3.1'
+version: '1.4.1'
 main: fr.mathip.azplugin.bukkit.Main
 author: MATHIP6
 softdepend: [Protocolib]
