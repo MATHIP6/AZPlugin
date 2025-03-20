@@ -6,7 +6,7 @@ import com.comphenix.protocol.events.ListenerPriority;
 import com.comphenix.protocol.events.PacketAdapter;
 import com.comphenix.protocol.events.PacketContainer;
 import com.comphenix.protocol.events.PacketEvent;
-import fr.mathip.azplugin.bukkit.ConfigManager;
+import fr.mathip.azplugin.bukkit.config.ConfigManager;
 import fr.mathip.azplugin.bukkit.Main;
 import fr.mathip.azplugin.bukkit.AZPlayer;
 import org.bukkit.entity.Player;

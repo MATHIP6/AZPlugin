@@ -1,7 +1,7 @@
 package fr.mathip.azplugin.bukkit.commands;
 
-import fr.mathip.azplugin.bukkit.Main;
-import fr.mathip.azplugin.bukkit.PopupConfig;
+import fr.mathip.azplugin.bukkit.config.ConfigManager;
+import fr.mathip.azplugin.bukkit.config.PopupConfig;
 import fr.mathip.azplugin.bukkit.handlers.PLSPPlayerModel;
 import fr.mathip.azplugin.bukkit.handlers.PLSPWorldEnv;
 import fr.mathip.azplugin.bukkit.packets.PacketPopup;
@@ -11,7 +11,6 @@ import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.EntityType;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class AZTabComplete implements TabCompleter {
@@ -57,7 +56,7 @@ public class AZTabComplete implements TabCompleter {
                 return completion;
             } else if (args.length == 2 && args[0].equalsIgnoreCase("popup")) {
                 List<String> completion = new ArrayList<>();
-                for (PacketPopup popup : PopupConfig.getInstance().popups) {
+                for (PacketPopup popup : ConfigManager.getInstance().getPopupConfig().popups) {
                     if (popup.getName().startsWith(args[1])) {
                         completion.add(popup.getName());
                     }

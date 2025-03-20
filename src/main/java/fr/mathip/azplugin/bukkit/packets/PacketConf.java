@@ -9,7 +9,6 @@ import pactify.client.api.plsp.packet.client.PLSPPacketConfFlag;
 import pactify.client.api.plsp.packet.client.PLSPPacketConfInt;
 
 public class PacketConf {
-    private static final AZManager AZManager = Main.getInstance().getAZManager();
 
     public static void setFlag(Player player, PLSPConfFlag flag, Boolean enabled) {
         PLSPPacketConfFlag PacketConfFlag = new PLSPPacketConfFlag();

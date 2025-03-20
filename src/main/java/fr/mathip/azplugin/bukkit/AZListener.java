@@ -4,10 +4,7 @@ import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.events.PacketAdapter;
 import com.comphenix.protocol.events.PacketEvent;
-import fr.mathip.azplugin.bukkit.handlers.PLSPConfFlag;
-import fr.mathip.azplugin.bukkit.handlers.PLSPConfInt;
-import fr.mathip.azplugin.bukkit.packets.PacketConf;
-import fr.mathip.azplugin.bukkit.utils.AZChatComponent;
+import fr.mathip.azplugin.bukkit.config.ConfigManager;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -16,7 +13,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
-import pactify.client.api.plsp.packet.client.PLSPPacketUiComponent;
 
 public class AZListener implements Listener {
 

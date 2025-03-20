@@ -1,5 +1,6 @@
 package fr.mathip.azplugin.bukkit;
 
+import fr.mathip.azplugin.bukkit.config.ConfigManager;
 import fr.mathip.azplugin.bukkit.packets.PacketWindow;
 import fr.mathip.azplugin.bukkit.commands.*;
 import org.bukkit.entity.Entity;

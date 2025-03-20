@@ -1,16 +1,12 @@
 package fr.mathip.azplugin.bukkit;
 
-import fr.mathip.azplugin.bukkit.handlers.PLSPConfFlag;
-import fr.mathip.azplugin.bukkit.handlers.PLSPConfInt;
-import fr.mathip.azplugin.bukkit.packets.PacketConf;
-import fr.mathip.azplugin.bukkit.utils.AZChatComponent;
+import fr.mathip.azplugin.bukkit.config.ConfigManager;
 import fr.mathip.azplugin.bukkit.utils.BukkitUtil;
 import fr.mathip.azplugin.bukkit.utils.SchedulerUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.metadata.MetadataValue;
 import pactify.client.api.plsp.packet.client.PLSPPacketEntityMeta;
-import pactify.client.api.plsp.packet.client.PLSPPacketUiComponent;
 
 import java.util.HashSet;
 import java.util.List;
@@ -55,39 +51,6 @@ public class AZPlayer {
         SchedulerUtil.cancelTasks(Main.getInstance(), this.scheduledTasks);
     }
 
-    public void loadFlags() {
-        ConfigManager config = ConfigManager.getInstance();
-        PacketConf.setFlag(player, PLSPConfFlag.ATTACK_COOLDOWN, config.isAttackCooldown());
-        PacketConf.setFlag(player, PLSPConfFlag.PLAYER_PUSH, config.isPlayerPush());
-        PacketConf.setFlag(player, PLSPConfFlag.LARGE_HITBOX, config.isLargeHitBox());
-        PacketConf.setFlag(player, PLSPConfFlag.SWORD_BLOCKING, config.isSwordBlocking());
-        PacketConf.setFlag(player, PLSPConfFlag.HIT_AND_BLOCK, config.isHitAndBlock());
-        PacketConf.setFlag(player, PLSPConfFlag.OLD_ENCHANTEMENTS, config.isOldEnchantments());
-        PacketConf.setFlag(player, PLSPConfFlag.SIDEBAR_SCORES, config.isSidebarScore());
-        PacketConf.setFlag(player, PLSPConfFlag.PVP_HIT_PRIORITY, config.isPvpHitPriority());
-        PacketConf.setFlag(player, PLSPConfFlag.SEE_CHUNKS, config.isSeeChunks());
-        PacketConf.setFlag(player, PLSPConfFlag.SMOOTH_EXPERIENCE_BAR, config.isSmoothExperienceBar());
-        PacketConf.setFlag(player, PLSPConfFlag.SORT_TAB_LIST_BY_NAMES, config.isSortTabListByName());
-        PacketConf.setFlag(player, PLSPConfFlag.SERVER_SIDE_ANVIL, config.isServerSideAnvil());
-        PacketConf.setFlag(player, PLSPConfFlag.PISTONS_RETRACT_ENTITIES, config.isPistonRetractEntities());
-        PacketConf.setFlag(player, PLSPConfFlag.HIT_INDICATOR, config.isHitIndicator());
-
-        PacketConf.setInt(player, PLSPConfInt.CHAT_MESSAGE_MAX_SIZE, config.getChatMaxMessageSize());
-        PacketConf.setInt(player, PLSPConfInt.MAX_BUILD_HEIGHT, config.getMaxBuildHeight());
-
-        for (PacketUiComponent uiComponent : config.getUIComponents()) {
-            AZChatComponent azChatComponent = new AZChatComponent(uiComponent.getText());
-            if (!uiComponent.getHoverText().equals("")) {
-                azChatComponent.setHoverEvent(new AZChatComponent.HoverEvent("show_text", uiComponent.getHoverText().replaceAll("%player%", player.getName())));
-            }
-            if (!uiComponent.getCommmand().equals("")) {
-                azChatComponent.setClickEvent(new AZChatComponent.ClickEvent("run_command", uiComponent.getCommmand().replaceAll("%player%", player.getName())));
-            }
-            PLSPPacketUiComponent packetUiComponent = new PLSPPacketUiComponent(uiComponent.getName(), azChatComponent);
-            AZManager.sendPLSPMessage(player, packetUiComponent);
-        }
-    }
-
     public boolean hasLauncher() {
         return this.launcherProtocolVersion > 0;
     }
@@ -104,7 +67,8 @@ public class AZPlayer {
         Bukkit.getScheduler().runTaskLater(Main.getInstance(), new Runnable() {
             @Override
             public void run() {
-                loadFlags();
+                ConfigManager.getInstance().getConFlags().applyFlags(player);
+                ConfigManager.getInstance().applyUIComponents(player);
             }
 
         }, 1);
@@ -201,7 +165,7 @@ public class AZPlayer {
     }
 
     public static boolean hasAZLauncher(final Player player) {
-        return Main.getInstance().getAZManager().getPlayer(player).hasLauncher();
+        return Main.getAZManager().getPlayer(player).hasLauncher();
     }
 
     public PLSPPacketEntityMeta getPlayerMeta() {

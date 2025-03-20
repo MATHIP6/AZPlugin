@@ -1,8 +1,9 @@
 package fr.mathip.azplugin.bukkit.commands;
 
-import fr.mathip.azplugin.bukkit.ConfigManager;
-import fr.mathip.azplugin.bukkit.PopupConfig;
+import fr.mathip.azplugin.bukkit.config.ConfigManager;
+import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
 public class AZReload implements AZCommand{
     @Override
@@ -23,8 +24,11 @@ public class AZReload implements AZCommand{
     @Override
     public void execute(CommandSender sender, String[] args) {
         sender.sendMessage("§a[AZPlugin]§e Reload en cours...");
-        ConfigManager.getInstance().initConfig();
-        PopupConfig.getInstance().load();
+        ConfigManager.getInstance().loadConfig();
+        for (Player player : Bukkit.getOnlinePlayers()) {
+            ConfigManager.getInstance().getConFlags().applyFlags(player);
+            ConfigManager.getInstance().applyUIComponents(player);
+        }
         sender.sendMessage("§a[AZPlugin]§e Reload terminé !");
     }
 }

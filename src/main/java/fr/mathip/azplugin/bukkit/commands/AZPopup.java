@@ -1,6 +1,6 @@
 package fr.mathip.azplugin.bukkit.commands;
 
-import fr.mathip.azplugin.bukkit.PopupConfig;
+import fr.mathip.azplugin.bukkit.config.ConfigManager;
 import fr.mathip.azplugin.bukkit.packets.PacketPopup;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
@@ -33,7 +33,7 @@ public class AZPopup implements AZCommand{
             sender.sendMessage("§cCe joueur est hors-ligne !");
             return;
         }
-        PacketPopup popup = PopupConfig.getInstance().getPopupByName(args[1]);
+        PacketPopup popup = ConfigManager.getInstance().getPopupConfig().getPopupByName(args[1]);
         if (popup != null) {
             popup.send(target);
             sender.sendMessage("§a[AZPlugin]§e popup envoyé ");
