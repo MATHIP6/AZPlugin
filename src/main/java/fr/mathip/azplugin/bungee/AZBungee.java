@@ -2,7 +2,7 @@ package fr.mathip.azplugin.bungee;
 
 import net.md_5.bungee.api.plugin.Plugin;
 
-public class AZClientPlugin extends Plugin {
+public class AZBungee extends Plugin {
 
     @Override
     public void onEnable() {
@@ -10,8 +10,4 @@ public class AZClientPlugin extends Plugin {
         getLogger().info("Plugin is now loaded!");
     }
 
-    @Override
-    public void onDisable() {
-
-    }
 }
