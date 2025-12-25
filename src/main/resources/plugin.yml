@@ -22,9 +22,6 @@ permissions:
   azplugin.command.reload:
     description: Permission pour la sous-commande 1
     default: op
-  azplugin.command.itemrender:
-    description: Permission pour la sous-commande 1
-    default: op
   azplugin.command.model:
     description: Permission pour la sous-commande 1
     default: op
@@ -48,6 +45,24 @@ permissions:
     default: op
   azplugin.command.seechunks:
     description: Permission pour la sous-commande 1
+    default: op
+  azplugin.command.item:
+    description: Permission pour la sous-commande item
+    default: op
+  azplugin.command.item.rarity:
+    description: Permission pour la sous-commande item rarity
+    default: op
+  azplugin.command.item.render:
+    description: Permission pour la sous-commande item render
+    default: op
+  azplugin.command.item.armor:
+    description: Permission pour la sous-commande item armor
+    default: op
+  azplugin.command.item.sprite:
+    description: Permission pour la sous-commande item sprite
+    default: op
+  azplugin.command.item.text:
+    description: Permission pour la sous-commande item text
     default: op
   azplugin.update:
     default: op

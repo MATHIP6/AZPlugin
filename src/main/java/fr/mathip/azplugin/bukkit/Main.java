@@ -3,6 +3,8 @@ package fr.mathip.azplugin.bukkit;
 import fr.mathip.azplugin.bukkit.config.ConfigManager;
 import fr.mathip.azplugin.bukkit.packets.PacketWindow;
 import fr.mathip.azplugin.bukkit.commands.*;
+import fr.mathip.azplugin.bukkit.commands.items.*;
+
 import org.bukkit.entity.Entity;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -30,8 +32,6 @@ public final class Main extends JavaPlugin {
 
     private ConfigManager configManager;
 
-
-
     public static Main getInstance() {
         return instance;
     }
@@ -44,9 +44,9 @@ public final class Main extends JavaPlugin {
         new ConfigManager(this);
         getServer().getPluginManager().registerEvents(new PacketWindow(this), this);
         AZManager = new AZManager(this);
-        //System.out.println(getConfig().getBoolean("attack_cooldown"));
+        // System.out.println(getConfig().getBoolean("attack_cooldown"));
         commandManager = new CommandManager();
-         getCommand("az").setExecutor(commandManager);
+        getCommand("az").setExecutor(commandManager);
         getCommand("az").setTabCompleter(new AZTabComplete());
         Bukkit.getPluginManager().registerEvents(new AZListener(this), this);
         entitiesSize = new HashMap<>();
@@ -55,7 +55,8 @@ public final class Main extends JavaPlugin {
         isUpdate = new AZUpdate(this, 115548).checkForUpdate();
         if (isUpdate) {
             getLogger().info("Une nouvelle version du plugin a été détecté !");
-            getLogger().info("Il est recommendé de le mettre à jour ici: https://www.spigotmc.org/resources/azplugin.115548/");
+            getLogger().info(
+                    "Il est recommendé de le mettre à jour ici: https://www.spigotmc.org/resources/azplugin.115548/");
         }
     }
 
@@ -71,10 +72,17 @@ public final class Main extends JavaPlugin {
         commandManager.addCommand(new AZSubTag());
         commandManager.addCommand(new AZSupTag());
         commandManager.addCommand(new AZSummon());
-        commandManager.addCommand(new AZItemRender());
         commandManager.addCommand(new AZPopup());
         commandManager.addCommand(new AZReload());
+        commandManager.addCommand(new AZItemCommand());
+
+        commandManager.addItemCommand(new ItemRenderCommand());
+        commandManager.addItemCommand(new ItemSpriteCommand());
+        commandManager.addItemCommand(new ItemArmorCommand());
+        commandManager.addItemCommand(new ItemTextCommand());
+        commandManager.addItemCommand(new ItemRarityCommand());
     }
+
     public static AZManager getAZManager() {
         return AZManager;
     }
@@ -82,8 +90,6 @@ public final class Main extends JavaPlugin {
     public String getPluginVersion() {
         return this.getDescription().getVersion();
     }
-
-
 
     @Override
     public void onDisable() {

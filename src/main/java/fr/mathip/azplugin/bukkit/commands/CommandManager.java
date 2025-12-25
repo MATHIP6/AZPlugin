@@ -4,17 +4,20 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 
+import fr.mathip.azplugin.bukkit.commands.items.ItemCommand;
+
 import java.util.*;
 
 public class CommandManager implements CommandExecutor {
 
     private Map<Class<? extends AZCommand>, AZCommand> commands;
+    private final Map<Class<? extends ItemCommand>, ItemCommand> itemCommands;
     private static CommandManager instance;
 
     public CommandManager() {
         commands = new HashMap<>();
+        itemCommands = new HashMap<>();
     }
-
 
     @Override
     public boolean onCommand(CommandSender commandSender, Command command, String s, String[] args) {
@@ -53,5 +56,13 @@ public class CommandManager implements CommandExecutor {
 
     public Map<Class<? extends AZCommand>, AZCommand> getCommands() {
         return commands;
+    }
+
+    public Map<Class<? extends ItemCommand>, ItemCommand> getItemCommands() {
+        return itemCommands;
+    }
+
+    public void addItemCommand(ItemCommand itemCommand) {
+        itemCommands.put(itemCommand.getClass(), itemCommand);
     }
 }
