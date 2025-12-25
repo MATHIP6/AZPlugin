@@ -22,9 +22,6 @@ permissions:
   azplugin.command.reload:
     description: Permission pour la sous-commande 1
     default: op
-  azplugin.command.itemrender:
-    description: Permission pour la sous-commande 1
-    default: op
   azplugin.command.model:
     description: Permission pour la sous-commande 1
     default: op
