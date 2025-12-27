@@ -32,14 +32,16 @@ public class AZChatComponent implements NotchianChatComponent {
             }
         }
         if (textComponent.getClickEvent() != null) {
-            this.clickEvent = new ClickEvent(textComponent.getClickEvent().getAction().name().toLowerCase(), textComponent.getClickEvent().getValue());
+            this.clickEvent = new ClickEvent(textComponent.getClickEvent().getAction().name().toLowerCase(),
+                    textComponent.getClickEvent().getValue());
         }
         if (textComponent.getHoverEvent() != null) {
             StringBuilder sb = new StringBuilder();
             for (BaseComponent baseComponent : textComponent.getHoverEvent().getValue()) {
                 sb.append(baseComponent.toLegacyText());
             }
-            this.hoverEvent = new HoverEvent(textComponent.getHoverEvent().getAction().name().toLowerCase(), sb.toString());
+            this.hoverEvent = new HoverEvent(textComponent.getHoverEvent().getAction().name().toLowerCase(),
+                    sb.toString());
         }
     }
 
@@ -89,7 +91,7 @@ public class AZChatComponent implements NotchianChatComponent {
             jsonArray.add(jsonObject);
             for (AZChatComponent chatComponent : this.extra) {
                 JsonElement jsonElement1 = parser.parse(chatComponent.toString());
-                //JsonObject jsonObject1 = jsonElement1.getAsJsonObject();
+                // JsonObject jsonObject1 = jsonElement1.getAsJsonObject();
                 jsonArray.add(jsonElement1);
             }
 
@@ -101,16 +103,17 @@ public class AZChatComponent implements NotchianChatComponent {
 
     @Override
     public void write(NotchianPacketBuffer notchianPacketBuffer) {
-        //notchianPacketBuffer.writeByte(1);
-        //String jsonMessage = "{\"text\":\"Click me!\",\"clickEvent\":{\"action\":\"run_command\",\"value\":\"/help\"}}";
+        // notchianPacketBuffer.writeByte(1);
+        // String jsonMessage = "{\"text\":\"Click
+        // me!\",\"clickEvent\":{\"action\":\"run_command\",\"value\":\"/help\"}}";
         NotchianPacketUtil.writeString(notchianPacketBuffer, this.toString(), 9999);
-        //notchianPacketBuffer.writeByte(0);
+        // notchianPacketBuffer.writeByte(0);
     }
 
     @Override
     public NotchianChatComponent shallowClone() {
         try {
-            return (AZChatComponent)super.clone();
+            return (AZChatComponent) super.clone();
         } catch (CloneNotSupportedException e) {
             throw new RuntimeException(e);
         }
@@ -119,6 +122,7 @@ public class AZChatComponent implements NotchianChatComponent {
     public static class ClickEvent {
         private String action;
         private String value;
+
         public ClickEvent(String action, String value) {
             this.action = action;
             this.value = value;
@@ -140,6 +144,7 @@ public class AZChatComponent implements NotchianChatComponent {
     public static class HoverEvent {
         private String action;
         private String value;
+
         public HoverEvent(String action, String value) {
             this.action = action;
             this.value = value;
@@ -159,6 +164,15 @@ public class AZChatComponent implements NotchianChatComponent {
 
         public void setAction(String action) {
             this.action = action;
+        }
+    }
+
+    @Override
+    public NotchianChatComponent deepClone() {
+        try {
+            return (AZChatComponent) super.clone();
+        } catch (CloneNotSupportedException e) {
+            throw new RuntimeException(e);
         }
     }
 

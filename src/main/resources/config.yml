@@ -82,3 +82,6 @@ ui-buttons:
     text: ""
     hover-text: ""
     command: ""
+
+module:
+  player-tag: false

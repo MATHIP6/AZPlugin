@@ -103,7 +103,7 @@
         <dependency>
             <groupId>nz.az-launcher</groupId>
             <artifactId>plsp-protocol</artifactId>
-            <version>20240524</version>
+            <version>20250111</version>
             <scope>compile</scope>
         </dependency>
         <dependency>

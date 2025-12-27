@@ -1,7 +1,9 @@
 package fr.mathip.azplugin.bukkit;
 
 import fr.mathip.azplugin.bukkit.config.ConfigManager;
+import fr.mathip.azplugin.bukkit.module.ModuleManager;
 import fr.mathip.azplugin.bukkit.packets.PacketWindow;
+import lombok.Getter;
 import fr.mathip.azplugin.bukkit.commands.*;
 import fr.mathip.azplugin.bukkit.commands.items.*;
 
@@ -32,6 +34,9 @@ public final class Main extends JavaPlugin {
 
     private ConfigManager configManager;
 
+    @Getter
+    private ModuleManager moduleManager;
+
     public static Main getInstance() {
         return instance;
     }
@@ -41,6 +46,7 @@ public final class Main extends JavaPlugin {
         Metrics metrics = new Metrics(this, 21554);
         instance = this;
         saveDefaultConfig();
+        moduleManager = new ModuleManager(this);
         new ConfigManager(this);
         getServer().getPluginManager().registerEvents(new PacketWindow(this), this);
         AZManager = new AZManager(this);
@@ -75,7 +81,6 @@ public final class Main extends JavaPlugin {
         commandManager.addCommand(new AZPopup());
         commandManager.addCommand(new AZReload());
         commandManager.addCommand(new AZItemCommand());
-
         commandManager.addItemCommand(new ItemRenderCommand());
         commandManager.addItemCommand(new ItemSpriteCommand());
         commandManager.addItemCommand(new ItemArmorCommand());
