@@ -6,11 +6,9 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 
-import fr.mathip.azplugin.bukkit.AZManager;
-import fr.mathip.azplugin.bukkit.AZPlayer;
+import fr.mathip.azplugin.bukkit.entity.AZPlayer;
 import fr.mathip.azplugin.bukkit.Main;
 import fr.mathip.azplugin.bukkit.module.Module;
-import fr.mathip.azplugin.bukkit.module.ModuleManager;
 import pactify.client.api.plprotocol.metadata.PactifyTagMetadata;
 import pactify.client.api.plprotocol.metadata.PactifyTagMetadata.Rarity;
 

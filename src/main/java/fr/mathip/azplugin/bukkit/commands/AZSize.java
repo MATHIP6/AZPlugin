@@ -1,7 +1,8 @@
 package fr.mathip.azplugin.bukkit.commands;
 
 import fr.mathip.azplugin.bukkit.Main;
-import fr.mathip.azplugin.bukkit.AZPlayer;
+import fr.mathip.azplugin.bukkit.entity.AZPlayer;
+import fr.mathip.azplugin.bukkit.entity.appearance.AZEntityScale;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -60,8 +61,11 @@ public class AZSize implements AZCommand{
         scaleMetadata.setDefined(true);
         scaleMetadata.setTags(size);
         azPlayer.getPlayerMeta().setScale(scaleMetadata);
+
+
+        azPlayer.setScale(new AZEntityScale(size));
         //PacketPlayerScale.setScale(target, size, size, size, size, size, size, size, size, size);
-        Bukkit.getScheduler().runTaskLater(Main.getInstance(), () -> azPlayer.updateMeta(), 1);
+        Bukkit.getScheduler().runTaskLater(Main.getInstance(), () -> azPlayer.flush(), 1);
         sender.sendMessage("§a[AZPlugin]§e changement de taille effectué !");
     }
 }

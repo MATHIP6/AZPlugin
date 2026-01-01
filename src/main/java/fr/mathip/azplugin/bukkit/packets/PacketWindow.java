@@ -8,7 +8,7 @@ import com.comphenix.protocol.events.PacketContainer;
 import com.comphenix.protocol.events.PacketEvent;
 import fr.mathip.azplugin.bukkit.config.ConfigManager;
 import fr.mathip.azplugin.bukkit.Main;
-import fr.mathip.azplugin.bukkit.AZPlayer;
+import fr.mathip.azplugin.bukkit.entity.AZPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;

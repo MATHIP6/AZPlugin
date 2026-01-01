@@ -1,5 +1,6 @@
 package fr.mathip.azplugin.bukkit;
 
+import fr.mathip.azplugin.bukkit.entity.AZPlayer;
 import fr.mathip.azplugin.bukkit.utils.PLSPPacketBuffer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -38,7 +39,7 @@ public class AZManager implements Listener, Closeable {
     public void onPlayerLogin(final PlayerLoginEvent event) {
         event.getPlayer().setMetadata("AZPlugin:hostname", new FixedMetadataValue(this.plugin, event.getHostname()));
         final AZPlayer AZPlayer;
-        this.players.put(event.getPlayer().getUniqueId(), AZPlayer = new AZPlayer(this, event.getPlayer()));
+        this.players.put(event.getPlayer().getUniqueId(), AZPlayer = new AZPlayer(event.getPlayer()));
         AZPlayer.init();
     }
 

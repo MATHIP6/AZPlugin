@@ -1,7 +1,7 @@
 package fr.mathip.azplugin.bukkit.commands;
 
 import fr.mathip.azplugin.bukkit.Main;
-import fr.mathip.azplugin.bukkit.AZPlayer;
+import fr.mathip.azplugin.bukkit.entity.AZPlayer;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;

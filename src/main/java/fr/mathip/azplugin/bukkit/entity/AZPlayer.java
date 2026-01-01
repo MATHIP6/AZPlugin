@@ -1,12 +1,18 @@
-package fr.mathip.azplugin.bukkit;
+package fr.mathip.azplugin.bukkit.entity;
 
+import fr.mathip.azplugin.bukkit.AZManager;
+import fr.mathip.azplugin.bukkit.Main;
 import fr.mathip.azplugin.bukkit.config.ConfigManager;
 import fr.mathip.azplugin.bukkit.utils.BukkitUtil;
 import fr.mathip.azplugin.bukkit.utils.SchedulerUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.metadata.MetadataValue;
+import pactify.client.api.plprotocol.metadata.ImmutablePactifyModelMetadata;
+import pactify.client.api.plprotocol.metadata.PactifyModelMetadata;
+import pactify.client.api.plsp.packet.client.PLSPPacketAbstractMeta;
 import pactify.client.api.plsp.packet.client.PLSPPacketEntityMeta;
+import pactify.client.api.plsp.packet.client.PLSPPacketPlayerMeta;
 
 import java.util.HashSet;
 import java.util.List;
@@ -14,9 +20,8 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class AZPlayer {
+public class AZPlayer extends AZEntity {
     private static final Pattern AZ_HOSTNAME_PATTERN;
-    private final AZManager service;
     private final Player player;
     private final Set<Integer> scheduledTasks;
     private boolean joined;
@@ -38,7 +43,7 @@ public class AZPlayer {
             }
         }
         else {
-            this.service.getPlugin().getLogger().warning("Unable to verify the launcher of " + this.player.getName() + ": it probably logged when the plugin was disabled!");
+            Main.getInstance().getLogger().warning("Unable to verify the launcher of " + this.player.getName() + ": it probably logged when the plugin was disabled!");
         }
         BukkitUtil.addChannel(this.player, "PLSP");
     }
@@ -59,9 +64,9 @@ public class AZPlayer {
         return this.launcherProtocolVersion;
     }
 
-    public AZPlayer(final AZManager service, final Player player) {
+    public AZPlayer(Player player) {
+        super(player);
         this.scheduledTasks = new HashSet<Integer>();
-        this.service = service;
         this.player = player;
         this.playerMeta = new PLSPPacketEntityMeta(player.getEntityId());
         Bukkit.getScheduler().runTaskLater(Main.getInstance(), new Runnable() {
@@ -72,10 +77,6 @@ public class AZPlayer {
             }
 
         }, 1);
-    }
-
-    public AZManager getService() {
-        return this.service;
     }
 
     public Player getPlayer() {
@@ -91,6 +92,18 @@ public class AZPlayer {
     }
 
     @Override
+    protected PLSPPacketAbstractMeta createMetadataPacket() {
+        PLSPPacketPlayerMeta playerMeta = new PLSPPacketPlayerMeta(player.getUniqueId());
+        playerMeta.setScale(getScale().toPacMetadata());
+        playerMeta.setTag(getTag().toPacMetadata());
+        playerMeta.setSupTag(getSupTag().toPacMetadata());
+        playerMeta.setSubTag(getSubTag().toPacMetadata());
+        playerMeta.setModel(new PactifyModelMetadata(-1));
+        return playerMeta;
+    }
+
+
+    @Override
     public boolean equals(final Object o) {
         if (o == this) {
             return true;
@@ -100,19 +113,6 @@ public class AZPlayer {
         }
         final AZPlayer other = (AZPlayer)o;
         if (!other.canEqual(this)) {
-            return false;
-        }
-        final Object this$service = this.getService();
-        final Object other$service = other.getService();
-        Label_0065: {
-            if (this$service == null) {
-                if (other$service == null) {
-                    break Label_0065;
-                }
-            }
-            else if (this$service.equals(other$service)) {
-                break Label_0065;
-            }
             return false;
         }
         final Object this$player = this.getPlayer();
@@ -148,8 +148,6 @@ public class AZPlayer {
     @Override
     public int hashCode() {
         int result = 1;
-        final Object $service = this.getService();
-        result = result * 59 + (($service == null) ? 43 : $service.hashCode());
         final Object $player = this.getPlayer();
         result = result * 59 + (($player == null) ? 43 : $player.hashCode());
         final Object $scheduledTasks = this.getScheduledTasks();
@@ -161,7 +159,7 @@ public class AZPlayer {
 
     @Override
     public String toString() {
-        return "AZPlayer(service=" + this.getService() + ", player=" + this.getPlayer() + ", scheduledTasks=" + this.getScheduledTasks() + ", joined=" + this.isJoined() + ", launcherProtocolVersion=" + this.getLauncherProtocolVersion() + ")";
+        return "AZPlayer(player=" + this.getPlayer() + ", scheduledTasks=" + this.getScheduledTasks() + ", joined=" + this.isJoined() + ", launcherProtocolVersion=" + this.getLauncherProtocolVersion() + ")";
     }
 
     public static boolean hasAZLauncher(final Player player) {
@@ -173,9 +171,10 @@ public class AZPlayer {
     }
 
     public void updateMeta() {
-        AZManager.sendPLSPMessage(player, this.playerMeta);
+        // This will be removed in the future
+        /*AZManager.sendPLSPMessage(player, this.playerMeta);
         for (Player pl : this.player.getWorld().getPlayers()) {
             AZManager.sendPLSPMessage(pl, this.playerMeta);
-        }
+        }*/
     }
 }
