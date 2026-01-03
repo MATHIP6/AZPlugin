@@ -41,9 +41,9 @@ public class AZPlayer extends AZEntity {
             if (m.find()) {
                 this.launcherProtocolVersion = Math.max(1, Integer.parseInt(m.group(1), 16));
             }
-        }
-        else {
-            Main.getInstance().getLogger().warning("Unable to verify the launcher of " + this.player.getName() + ": it probably logged when the plugin was disabled!");
+        } else {
+            Main.getInstance().getLogger().warning("Unable to verify the launcher of " + this.player.getName()
+                    + ": it probably logged when the plugin was disabled!");
         }
         BukkitUtil.addChannel(this.player, "PLSP");
     }
@@ -102,7 +102,6 @@ public class AZPlayer extends AZEntity {
         return playerMeta;
     }
 
-
     @Override
     public boolean equals(final Object o) {
         if (o == this) {
@@ -111,7 +110,7 @@ public class AZPlayer extends AZEntity {
         if (!(o instanceof AZPlayer)) {
             return false;
         }
-        final AZPlayer other = (AZPlayer)o;
+        final AZPlayer other = (AZPlayer) o;
         if (!other.canEqual(this)) {
             return false;
         }
@@ -122,8 +121,7 @@ public class AZPlayer extends AZEntity {
                 if (other$player == null) {
                     break Label_0102;
                 }
-            }
-            else if (this$player.equals(other$player)) {
+            } else if (this$player.equals(other$player)) {
                 break Label_0102;
             }
             return false;
@@ -132,11 +130,12 @@ public class AZPlayer extends AZEntity {
         final Object other$scheduledTasks = other.getScheduledTasks();
         if (this$scheduledTasks == null) {
             if (other$scheduledTasks == null) {
-                return this.isJoined() == other.isJoined() && this.getLauncherProtocolVersion() == other.getLauncherProtocolVersion();
+                return this.isJoined() == other.isJoined()
+                        && this.getLauncherProtocolVersion() == other.getLauncherProtocolVersion();
             }
-        }
-        else if (this$scheduledTasks.equals(other$scheduledTasks)) {
-            return this.isJoined() == other.isJoined() && this.getLauncherProtocolVersion() == other.getLauncherProtocolVersion();
+        } else if (this$scheduledTasks.equals(other$scheduledTasks)) {
+            return this.isJoined() == other.isJoined()
+                    && this.getLauncherProtocolVersion() == other.getLauncherProtocolVersion();
         }
         return false;
     }
@@ -159,7 +158,8 @@ public class AZPlayer extends AZEntity {
 
     @Override
     public String toString() {
-        return "AZPlayer(player=" + this.getPlayer() + ", scheduledTasks=" + this.getScheduledTasks() + ", joined=" + this.isJoined() + ", launcherProtocolVersion=" + this.getLauncherProtocolVersion() + ")";
+        return "AZPlayer(player=" + this.getPlayer() + ", scheduledTasks=" + this.getScheduledTasks() + ", joined="
+                + this.isJoined() + ", launcherProtocolVersion=" + this.getLauncherProtocolVersion() + ")";
     }
 
     public static boolean hasAZLauncher(final Player player) {
@@ -172,9 +172,11 @@ public class AZPlayer extends AZEntity {
 
     public void updateMeta() {
         // This will be removed in the future
-        /*AZManager.sendPLSPMessage(player, this.playerMeta);
-        for (Player pl : this.player.getWorld().getPlayers()) {
-            AZManager.sendPLSPMessage(pl, this.playerMeta);
-        }*/
+        /*
+         * AZManager.sendPLSPMessage(player, this.playerMeta);
+         * for (Player pl : this.player.getWorld().getPlayers()) {
+         * AZManager.sendPLSPMessage(pl, this.playerMeta);
+         * }
+         */
     }
 }

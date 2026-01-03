@@ -43,4 +43,22 @@ public class PLSPPacketBuffer extends AbstractPLSPPacketBuffer<PLSPPacketBuffer>
     public byte[] toBytes() {
         return this.handle.toByteArray();
     }
+
+    @Override
+    public PLSPPacketBuffer markReaderIndex() {
+        // TODO Implement this method
+        return null;
+    }
+
+    @Override
+    public int readableBytes() {
+        // TODO Implement this method
+        return 0;
+    }
+
+    @Override
+    public PLSPPacketBuffer resetReaderIndex() {
+        // TODO Implement this method
+        throw null;
+    }
 }

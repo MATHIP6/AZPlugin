@@ -52,8 +52,7 @@ public class AZEntityTag {
         }
         PactifyTagMetadata tag = new PactifyTagMetadata();
         tag.setText(text);
-        tag.setRarity(PactifyTagMetadata.Rarity.LEGENDARY);
-        //tag.setRarity(Rarity.convertNameTagRarity(rarity));
+        tag.setRarity(Rarity.convertNameTagRarity(rarity));
         tag.setDistance(convertFloat(viewDistance));
         tag.setOpacity(convertFloat(opacity));
         tag.setThroughWallOpacity(convertFloat(throughWallOpacity));
@@ -105,7 +104,9 @@ public class AZEntityTag {
         RARE,
         EPIC,
         LEGENDARY,
-        MYTHIC;
+        MYTHIC,
+        COSMIC,
+        ULTIMATE;
 
         public static PactifyTagMetadata.Rarity convertNameTagRarity(Rarity rarity) {
             if (rarity == null) {
@@ -124,6 +125,11 @@ public class AZEntityTag {
                     return PactifyTagMetadata.Rarity.LEGENDARY;
                 case MYTHIC:
                     return PactifyTagMetadata.Rarity.MYTHIC;
+                case COSMIC:
+                    return PactifyTagMetadata.Rarity.COSMIC;
+                case ULTIMATE:
+                    return PactifyTagMetadata.Rarity.ULTIMATE;
+
                 default:
                     throw new IllegalArgumentException("Unknown rarity: " + rarity);
             }

@@ -3,13 +3,14 @@ package fr.mathip.azplugin.bukkit.commands;
 import fr.mathip.azplugin.bukkit.Main;
 import fr.mathip.azplugin.bukkit.entity.AZPlayer;
 import fr.mathip.azplugin.bukkit.entity.appearance.AZEntityTag;
+
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import pactify.client.api.plprotocol.metadata.ImmutablePactifyTagMetadata;
 import pactify.client.api.plprotocol.metadata.PactifyTagMetadata;
 
-public class AZTag implements AZCommand{
+public class AZTag implements AZCommand {
     @Override
     public String name() {
         return "tag";
@@ -59,8 +60,6 @@ public class AZTag implements AZCommand{
         PactifyTagMetadata tagMetadata = new PactifyTagMetadata();
         tagMetadata.setText(sb.toString());
         azPlayer.getPlayerMeta().setTag(tagMetadata);
-
-        azPlayer.setTag(AZEntityTag.builder().text("azddaz").build());
 
         Bukkit.getScheduler().runTaskLater(Main.getInstance(), () -> azPlayer.flush(), 1);
         sender.sendMessage("§a[AZPlugin]§e changement de tag effectué !");
