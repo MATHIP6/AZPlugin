@@ -13,6 +13,7 @@ import pactify.client.api.plprotocol.metadata.PactifyModelMetadata;
 import pactify.client.api.plsp.packet.client.PLSPPacketAbstractMeta;
 import pactify.client.api.plsp.packet.client.PLSPPacketEntityMeta;
 import pactify.client.api.plsp.packet.client.PLSPPacketPlayerMeta;
+import pactify.client.api.plsp.packet.client.PLSPPacketReset;
 
 import java.util.HashSet;
 import java.util.List;
@@ -46,6 +47,10 @@ public class AZPlayer extends AZEntity {
                     + ": it probably logged when the plugin was disabled!");
         }
         BukkitUtil.addChannel(this.player, "PLSP");
+        Bukkit.getScheduler().runTaskLaterAsynchronously(
+                Main.getInstance(),
+                () -> AZManager.sendPLSPMessage(player, new PLSPPacketReset()),
+                10L);
     }
 
     public void join() {
