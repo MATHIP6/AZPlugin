@@ -20,8 +20,7 @@ public class AZPlayer {
     private final Player player;
     private final Set<Integer> scheduledTasks;
     private boolean joined;
-    private int launcherProtocolVersion;
-
+    private boolean isAZ;
     private PLSPPacketEntityMeta playerMeta;
 
     static {
@@ -29,17 +28,6 @@ public class AZPlayer {
     }
 
     public void init() {
-        final List<MetadataValue> hostnameMeta = this.player.getMetadata("AZPlugin:hostname");
-        if (!hostnameMeta.isEmpty()) {
-            final String hostname = hostnameMeta.get(0).asString();
-            final Matcher m = AZPlayer.AZ_HOSTNAME_PATTERN.matcher(hostname);
-            if (m.find()) {
-                this.launcherProtocolVersion = Math.max(1, Integer.parseInt(m.group(1), 16));
-            }
-        }
-        else {
-            this.service.getPlugin().getLogger().warning("Unable to verify the launcher of " + this.player.getName() + ": it probably logged when the plugin was disabled!");
-        }
         BukkitUtil.addChannel(this.player, "PLSP");
     }
 
@@ -52,17 +40,18 @@ public class AZPlayer {
     }
 
     public boolean hasLauncher() {
-        return this.launcherProtocolVersion > 0;
+        return isAZ;
     }
 
-    public int getLauncherProtocolVersion() {
-        return this.launcherProtocolVersion;
+    public void setAZ(boolean az) {
+        this.isAZ = az;
     }
 
     public AZPlayer(final AZManager service, final Player player) {
         this.scheduledTasks = new HashSet<Integer>();
         this.service = service;
         this.player = player;
+        this.isAZ = false;
         this.playerMeta = new PLSPPacketEntityMeta(player.getEntityId());
         Bukkit.getScheduler().runTaskLater(Main.getInstance(), new Runnable() {
             @Override
@@ -98,7 +87,7 @@ public class AZPlayer {
         if (!(o instanceof AZPlayer)) {
             return false;
         }
-        final AZPlayer other = (AZPlayer)o;
+        final AZPlayer other = (AZPlayer) o;
         if (!other.canEqual(this)) {
             return false;
         }
@@ -109,8 +98,7 @@ public class AZPlayer {
                 if (other$service == null) {
                     break Label_0065;
                 }
-            }
-            else if (this$service.equals(other$service)) {
+            } else if (this$service.equals(other$service)) {
                 break Label_0065;
             }
             return false;
@@ -122,8 +110,7 @@ public class AZPlayer {
                 if (other$player == null) {
                     break Label_0102;
                 }
-            }
-            else if (this$player.equals(other$player)) {
+            } else if (this$player.equals(other$player)) {
                 break Label_0102;
             }
             return false;
@@ -132,11 +119,10 @@ public class AZPlayer {
         final Object other$scheduledTasks = other.getScheduledTasks();
         if (this$scheduledTasks == null) {
             if (other$scheduledTasks == null) {
-                return this.isJoined() == other.isJoined() && this.getLauncherProtocolVersion() == other.getLauncherProtocolVersion();
+                return this.isJoined() == other.isJoined();
             }
-        }
-        else if (this$scheduledTasks.equals(other$scheduledTasks)) {
-            return this.isJoined() == other.isJoined() && this.getLauncherProtocolVersion() == other.getLauncherProtocolVersion();
+        } else if (this$scheduledTasks.equals(other$scheduledTasks)) {
+            return this.isJoined() == other.isJoined();
         }
         return false;
     }
@@ -155,13 +141,13 @@ public class AZPlayer {
         final Object $scheduledTasks = this.getScheduledTasks();
         result = result * 59 + (($scheduledTasks == null) ? 43 : $scheduledTasks.hashCode());
         result = result * 59 + (this.isJoined() ? 79 : 97);
-        result = result * 59 + this.getLauncherProtocolVersion();
         return result;
     }
 
     @Override
     public String toString() {
-        return "AZPlayer(service=" + this.getService() + ", player=" + this.getPlayer() + ", scheduledTasks=" + this.getScheduledTasks() + ", joined=" + this.isJoined() + ", launcherProtocolVersion=" + this.getLauncherProtocolVersion() + ")";
+        return "AZPlayer(service=" + this.getService() + ", player=" + this.getPlayer() + ", scheduledTasks="
+                + this.getScheduledTasks() + ", joined=" + this.isJoined() + ")";
     }
 
     public static boolean hasAZLauncher(final Player player) {

@@ -18,56 +18,52 @@ import pactify.client.api.plsp.PLSPProtocol;
 
 import java.io.Closeable;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.logging.Level;
 
 public class AZManager implements Listener, Closeable {
-    private final Plugin plugin;
-    private final Map<UUID, AZPlayer> players;
+    private final Main plugin;
+    private final List<AZPlayer> players;
 
-    public AZManager(final Plugin plugin) {
-        this.players = new HashMap<UUID, AZPlayer>();
+    public AZManager(final Main plugin) {
+        this.players = new ArrayList<>();
         this.plugin = plugin;
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
         plugin.getServer().getMessenger().registerOutgoingPluginChannel(plugin, "PLSP");
     }
 
-    @EventHandler(priority = EventPriority.LOWEST)
-    public void onPlayerLogin(final PlayerLoginEvent event) {
-        event.getPlayer().setMetadata("AZPlugin:hostname", new FixedMetadataValue(this.plugin, event.getHostname()));
-        final AZPlayer AZPlayer;
-        this.players.put(event.getPlayer().getUniqueId(), AZPlayer = new AZPlayer(this, event.getPlayer()));
-        AZPlayer.init();
-    }
-
-    @EventHandler(priority = EventPriority.MONITOR)
-    public void onPlayerLoginMonitor(final PlayerLoginEvent event) {
-        if (event.getResult() != PlayerLoginEvent.Result.ALLOWED) {
-            this.playerQuit(event.getPlayer());
-        }
-    }
-
     @EventHandler
     public void onPlayerJoin(final PlayerJoinEvent event) {
-        final AZPlayer AZPlayer = this.getPlayer(event.getPlayer());
-        AZPlayer.join();
+        final AZPlayer azPlayer;
+        azPlayer = new AZPlayer(this, event.getPlayer());
+        if (plugin.getConnectionManager().getAzPlayers().contains(azPlayer.getPlayer().getUniqueId())) {
+            azPlayer.setAZ(true);
+        }
+        azPlayer.init();
+        azPlayer.join();
     }
 
     public AZPlayer getPlayer(final Player player) {
-        return this.players.get(player.getUniqueId());
+        for (AZPlayer azPlayer : players) {
+            if (azPlayer.getPlayer().equals(player)) {
+                return azPlayer;
+            }
+        }
+        return null;
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onPlayerQuit(final PlayerQuitEvent event) {
-        this.playerQuit(event.getPlayer());
-    }
-
-    private void playerQuit(final Player player) {
-        final AZPlayer AZPlayer = this.players.remove(player.getUniqueId());
-        if (AZPlayer != null) {
-            AZPlayer.free();
+        for (AZPlayer azPlayer : players) {
+            if (azPlayer.getPlayer().equals(event.getPlayer())) {
+                if (azPlayer != null) {
+                    azPlayer.free();
+                }
+            }
         }
     }
 
@@ -78,9 +74,9 @@ public class AZManager implements Listener, Closeable {
             NotchianPacketUtil.writeString(buf, packetData.getId(), 32767);
             message.write(buf);
             player.sendPluginMessage(Main.getInstance(), "PLSP", buf.toBytes());
-        }
-        catch (Exception e) {
-            Main.getInstance().getLogger().log(Level.WARNING, "Exception sending PLSP message to " + ((player != null) ? player.getName() : "null") + ":", e);
+        } catch (Exception e) {
+            Main.getInstance().getLogger().log(Level.WARNING,
+                    "Exception sending PLSP message to " + ((player != null) ? player.getName() : "null") + ":", e);
         }
     }
 

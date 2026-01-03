@@ -1,6 +1,7 @@
 package fr.mathip.azplugin.bukkit;
 
 import fr.mathip.azplugin.bukkit.config.ConfigManager;
+import fr.mathip.azplugin.bukkit.connection.ConnectionManager;
 import fr.mathip.azplugin.bukkit.module.ModuleManager;
 import fr.mathip.azplugin.bukkit.packets.PacketWindow;
 import lombok.Getter;
@@ -33,6 +34,8 @@ public final class Main extends JavaPlugin {
     private CommandManager commandManager;
 
     private ConfigManager configManager;
+    @Getter
+    private ConnectionManager connectionManager;
 
     @Getter
     private ModuleManager moduleManager;
@@ -50,6 +53,7 @@ public final class Main extends JavaPlugin {
         new ConfigManager(this);
         getServer().getPluginManager().registerEvents(new PacketWindow(this), this);
         AZManager = new AZManager(this);
+        connectionManager = new ConnectionManager();
         // System.out.println(getConfig().getBoolean("attack_cooldown"));
         commandManager = new CommandManager();
         getCommand("az").setExecutor(commandManager);
