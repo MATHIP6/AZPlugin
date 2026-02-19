@@ -103,7 +103,7 @@ public class AZPlayer extends AZEntity {
         playerMeta.setTag(getTag().toPacMetadata());
         playerMeta.setSupTag(getSupTag().toPacMetadata());
         playerMeta.setSubTag(getSubTag().toPacMetadata());
-        playerMeta.setModel(new PactifyModelMetadata(-1));
+        playerMeta.setModel(getModel().toPacMetadata());
         return playerMeta;
     }
 

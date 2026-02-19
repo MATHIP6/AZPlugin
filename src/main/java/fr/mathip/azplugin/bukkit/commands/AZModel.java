@@ -2,13 +2,13 @@ package fr.mathip.azplugin.bukkit.commands;
 
 import fr.mathip.azplugin.bukkit.Main;
 import fr.mathip.azplugin.bukkit.entity.AZPlayer;
+import fr.mathip.azplugin.bukkit.entity.appearance.AZEntityModel;
 import fr.mathip.azplugin.bukkit.handlers.PLSPPlayerModel;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import pactify.client.api.plprotocol.metadata.PactifyModelMetadata;
 
-public class AZModel implements AZCommand{
+public class AZModel implements AZCommand {
     @Override
     public String name() {
         return "model";
@@ -45,23 +45,19 @@ public class AZModel implements AZCommand{
             }
         }
         AZPlayer azPlayer = Main.getAZManager().getPlayer(target);
-        if (args[1].equalsIgnoreCase("reset")){
-            azPlayer.getPlayerMeta().setModel(new PactifyModelMetadata(-1));
-            azPlayer.updateMeta();
+        if (args[1].equalsIgnoreCase("reset")) {
+            azPlayer.setModel(new AZEntityModel());
+            azPlayer.flush();
             sender.sendMessage("§achangement de skin effectué !");
             return;
         }
-
         try {
             PLSPPlayerModel plspPlayerModel = PLSPPlayerModel.valueOf(args[1].toUpperCase());
-            PactifyModelMetadata modelMetadata = new PactifyModelMetadata();
-            modelMetadata.setId(plspPlayerModel.getId());
-            azPlayer.getPlayerMeta().setModel(modelMetadata);
-            Bukkit.getScheduler().runTaskLater(Main.getInstance(), () -> azPlayer.updateMeta(), 1);
+            azPlayer.setModel(new AZEntityModel(plspPlayerModel));
+            azPlayer.flush();
             sender.sendMessage("§a[AZPlugin]§e changement de skin effectué !");
-        } catch (IllegalArgumentException e){
+        } catch (IllegalArgumentException e) {
             sender.sendMessage("§cErreur : La valeur est invalide !.");
         }
-
     }
 }

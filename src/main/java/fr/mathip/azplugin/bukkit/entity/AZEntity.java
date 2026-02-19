@@ -1,6 +1,7 @@
 package fr.mathip.azplugin.bukkit.entity;
 
 import fr.mathip.azplugin.bukkit.AZManager;
+import fr.mathip.azplugin.bukkit.entity.appearance.AZEntityModel;
 import fr.mathip.azplugin.bukkit.entity.appearance.AZEntityScale;
 import fr.mathip.azplugin.bukkit.entity.appearance.AZEntityTag;
 import lombok.Data;
@@ -16,6 +17,7 @@ import org.bukkit.entity.Player;
 public class AZEntity {
     private Entity entity;
     private AZEntityScale scale;
+    private AZEntityModel model;
     private AZEntityTag tag;
     private AZEntityTag subTag;
     private AZEntityTag supTag;
@@ -28,6 +30,7 @@ public class AZEntity {
     public AZEntity(Entity entity) {
         this.entity = entity;
         this.scale = new AZEntityScale();
+        this.model = new AZEntityModel();
         this.tag = new AZEntityTag();
         this.subTag = new AZEntityTag();
         this.supTag = new AZEntityTag();
@@ -36,10 +39,10 @@ public class AZEntity {
     protected PLSPPacketAbstractMeta createMetadataPacket() {
         PLSPPacketEntityMeta entityMeta = new PLSPPacketEntityMeta(entity.getEntityId());
         entityMeta.setScale(scale.toPacMetadata());
+        entityMeta.setModel(model.toPacMetadata());
         entityMeta.setTag(tag.toPacMetadata());
         entityMeta.setSupTag(supTag.toPacMetadata());
         entityMeta.setSubTag(subTag.toPacMetadata());
-        entityMeta.setModel(new ImmutablePactifyModelMetadata());
         return entityMeta;
     }
 
