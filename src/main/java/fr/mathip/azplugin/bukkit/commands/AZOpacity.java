@@ -6,7 +6,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-public class AZOpacity implements AZCommand{
+public class AZOpacity implements AZCommand {
     @Override
     public String name() {
         return "opacity";
@@ -51,8 +51,8 @@ public class AZOpacity implements AZCommand{
             sender.sendMessage("§cErreur: L'opacité droit être entre 1 et -1");
             return;
         }
-        azPlayer.getPlayerMeta().setOpacity(opacity);
-        azPlayer.updateMeta();
+        azPlayer.setOpacity(opacity);
+        azPlayer.flush();
         sender.sendMessage("§a[AZPlugin]§e changement de d'opacité effectué !");
     }
 }

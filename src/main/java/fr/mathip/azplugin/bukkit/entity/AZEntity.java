@@ -21,6 +21,7 @@ public class AZEntity {
     private AZEntityTag tag;
     private AZEntityTag subTag;
     private AZEntityTag supTag;
+    private float opacity;
 
     // TODO add a getTrackers method instead of get all onlin players
     // public void getTrackers() {
@@ -34,6 +35,7 @@ public class AZEntity {
         this.tag = new AZEntityTag();
         this.subTag = new AZEntityTag();
         this.supTag = new AZEntityTag();
+        this.opacity = -1.0F;
     }
 
     protected PLSPPacketAbstractMeta createMetadataPacket() {
@@ -43,6 +45,7 @@ public class AZEntity {
         entityMeta.setTag(tag.toPacMetadata());
         entityMeta.setSupTag(supTag.toPacMetadata());
         entityMeta.setSubTag(subTag.toPacMetadata());
+        entityMeta.setOpacity(opacity);
         return entityMeta;
     }
 
