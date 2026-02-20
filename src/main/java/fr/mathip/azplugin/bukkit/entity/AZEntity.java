@@ -5,7 +5,6 @@ import fr.mathip.azplugin.bukkit.entity.appearance.AZEntityModel;
 import fr.mathip.azplugin.bukkit.entity.appearance.AZEntityScale;
 import fr.mathip.azplugin.bukkit.entity.appearance.AZEntityTag;
 import lombok.Data;
-import pactify.client.api.plprotocol.metadata.ImmutablePactifyModelMetadata;
 import pactify.client.api.plsp.packet.client.PLSPPacketAbstractMeta;
 import pactify.client.api.plsp.packet.client.PLSPPacketEntityMeta;
 

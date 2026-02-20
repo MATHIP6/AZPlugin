@@ -23,7 +23,6 @@ public final class Main extends JavaPlugin {
     static public Main instance;
 
     private static AZManager AZManager;
-    public HashMap<Entity, PLSPPacketEntityMeta> entitiesSize;
 
     public List<Player> playersSeeChunks;
     private BukkitTask bukkitTask;
@@ -55,7 +54,6 @@ public final class Main extends JavaPlugin {
         getCommand("az").setExecutor(commandManager);
         getCommand("az").setTabCompleter(new AZTabComplete());
         Bukkit.getPluginManager().registerEvents(new AZListener(this), this);
-        entitiesSize = new HashMap<>();
         playersSeeChunks = new ArrayList<>();
         setCommands();
         isUpdate = new AZUpdate(this, 115548).checkForUpdate();

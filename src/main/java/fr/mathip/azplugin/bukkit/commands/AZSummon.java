@@ -1,7 +1,8 @@
 package fr.mathip.azplugin.bukkit.commands;
 
 import fr.mathip.azplugin.bukkit.Main;
-import fr.mathip.azplugin.bukkit.AZManager;
+import fr.mathip.azplugin.bukkit.entity.AZEntity;
+import fr.mathip.azplugin.bukkit.entity.appearance.AZEntityScale;
 import fr.mathip.azplugin.bukkit.handlers.PLSPPlayerModel;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -10,10 +11,8 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
-import pactify.client.api.plprotocol.metadata.PactifyScaleMetadata;
-import pactify.client.api.plsp.packet.client.PLSPPacketEntityMeta;
 
-public class AZSummon implements AZCommand{
+public class AZSummon implements AZCommand {
     @Override
     public String name() {
         return "summon";
@@ -54,12 +53,10 @@ public class AZSummon implements AZCommand{
                 }
                 location = new Location(world, x, y, z);
 
-
             } catch (NumberFormatException e) {
                 sender.sendMessage("§cErreur: La location est invalide");
                 return;
             }
-
 
         } else {
             sender.sendMessage("§cUsage: /az summon <entité> <taille> [<x> <y> <z>]");
@@ -71,13 +68,11 @@ public class AZSummon implements AZCommand{
             sender.sendMessage("§cErreur: La taille est invalide");
             return;
         }
-        Entity entity = location.getWorld().spawnEntity(location, EntityType.fromId(PLSPPlayerModel.valueOf(args[1]).getId()));
-        PLSPPacketEntityMeta packetEntityMeta = new PLSPPacketEntityMeta(entity.getEntityId());
-        packetEntityMeta.setScale(new PactifyScaleMetadata(size, size, size, size, size, true));
-        Main.getInstance().entitiesSize.put(entity, packetEntityMeta);
-        for (Player player1 : location.getWorld().getPlayers()) {
-            AZManager.sendPLSPMessage(player1, packetEntityMeta);
-        }
+        Entity entity = location.getWorld().spawnEntity(location,
+                EntityType.fromId(PLSPPlayerModel.valueOf(args[1]).getId()));
+        AZEntity azEntity = Main.getAZManager().getEntity(entity);
+        azEntity.setScale(new AZEntityScale(size));
+        azEntity.flush();
         sender.sendMessage("§a[AZPlugin]§e entité crée avec succès");
 
     }

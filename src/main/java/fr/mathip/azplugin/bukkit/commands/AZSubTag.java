@@ -2,13 +2,15 @@ package fr.mathip.azplugin.bukkit.commands;
 
 import fr.mathip.azplugin.bukkit.Main;
 import fr.mathip.azplugin.bukkit.entity.AZPlayer;
+import fr.mathip.azplugin.bukkit.entity.appearance.AZEntityTag;
+
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import pactify.client.api.plprotocol.metadata.ImmutablePactifyTagMetadata;
 import pactify.client.api.plprotocol.metadata.PactifyTagMetadata;
 
-public class AZSubTag implements AZCommand{
+public class AZSubTag implements AZCommand {
     @Override
     public String name() {
         return "subtag";
@@ -39,8 +41,8 @@ public class AZSubTag implements AZCommand{
         }
         AZPlayer azPlayer = Main.getAZManager().getPlayer(target);
         if (args[2].equalsIgnoreCase("reset")) {
-            azPlayer.getPlayerMeta().setSubTag(new ImmutablePactifyTagMetadata(""));
-            azPlayer.updateMeta();
+            azPlayer.setSubTag(new AZEntityTag());
+            azPlayer.flush();
             sender.sendMessage("§a[AZPlugin]§e changement de tag effectué !");
             return;
         }
@@ -53,10 +55,9 @@ public class AZSubTag implements AZCommand{
             }
             count++;
         }
-        PactifyTagMetadata tagMetadata = new PactifyTagMetadata();
-        tagMetadata.setText(sb.toString());
-        azPlayer.getPlayerMeta().setSubTag(tagMetadata);
-        Bukkit.getScheduler().runTaskLater(Main.getInstance(), () -> azPlayer.updateMeta(), 1);
+        azPlayer.setSubTag(AZEntityTag.builder().text(sb.toString()).build());
+
+        Bukkit.getScheduler().runTaskLater(Main.getInstance(), () -> azPlayer.flush(), 1);
         sender.sendMessage("§a[AZPlugin]§e changement de tag effectué !");
     }
 }

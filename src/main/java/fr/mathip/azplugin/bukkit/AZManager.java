@@ -1,7 +1,10 @@
 package fr.mathip.azplugin.bukkit;
 
+import fr.mathip.azplugin.bukkit.entity.AZEntity;
 import fr.mathip.azplugin.bukkit.entity.AZPlayer;
 import fr.mathip.azplugin.bukkit.utils.PLSPPacketBuffer;
+
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -19,7 +22,9 @@ import pactify.client.api.plsp.PLSPProtocol;
 
 import java.io.Closeable;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.logging.Level;
@@ -27,6 +32,7 @@ import java.util.logging.Level;
 public class AZManager implements Listener, Closeable {
     private final Plugin plugin;
     private final Map<UUID, AZPlayer> players;
+    private final List<AZEntity> entities = new ArrayList<>();
 
     public AZManager(final Plugin plugin) {
         this.players = new HashMap<UUID, AZPlayer>();
@@ -72,6 +78,39 @@ public class AZManager implements Listener, Closeable {
         }
     }
 
+    public List<AZEntity> getEntyties() {
+        return entities;
+    }
+
+    public AZEntity getEntityOrNull(Entity entity) {
+        if (entity instanceof Player) {
+            return getPlayer((Player) entity);
+        }
+        for (AZEntity ret : this.entities) {
+            if (entity.equals(ret.getEntity())) {
+                return ret;
+            }
+        }
+        return null;
+    }
+
+    public AZEntity getEntity(Entity entity) {
+        if (entity == null) {
+            return null;
+        }
+        if (entity instanceof Player) {
+            return getPlayer((Player) entity);
+        }
+        for (AZEntity ret : this.entities) {
+            if (entity.equals(ret.getEntity())) {
+                return ret;
+            }
+        }
+        AZEntity azEntity = new AZEntity(entity);
+        entities.add(azEntity);
+        return azEntity;
+    }
+
     public static void sendPLSPMessage(final Player player, final PLSPPacket<PLSPPacketHandler.ClientHandler> message) {
         try {
             final PLSPPacketBuffer buf = new PLSPPacketBuffer();
@@ -79,9 +118,9 @@ public class AZManager implements Listener, Closeable {
             NotchianPacketUtil.writeString(buf, packetData.getId(), 32767);
             message.write(buf);
             player.sendPluginMessage(Main.getInstance(), "PLSP", buf.toBytes());
-        }
-        catch (Exception e) {
-            Main.getInstance().getLogger().log(Level.WARNING, "Exception sending PLSP message to " + ((player != null) ? player.getName() : "null") + ":", e);
+        } catch (Exception e) {
+            Main.getInstance().getLogger().log(Level.WARNING,
+                    "Exception sending PLSP message to " + ((player != null) ? player.getName() : "null") + ":", e);
         }
     }
 

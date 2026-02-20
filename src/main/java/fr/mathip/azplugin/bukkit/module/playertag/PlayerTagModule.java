@@ -7,10 +7,10 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 
 import fr.mathip.azplugin.bukkit.entity.AZPlayer;
+import fr.mathip.azplugin.bukkit.entity.appearance.AZEntityTag;
+import fr.mathip.azplugin.bukkit.entity.appearance.AZEntityTag.Rarity;
 import fr.mathip.azplugin.bukkit.Main;
 import fr.mathip.azplugin.bukkit.module.Module;
-import pactify.client.api.plprotocol.metadata.PactifyTagMetadata;
-import pactify.client.api.plprotocol.metadata.PactifyTagMetadata.Rarity;
 
 public class PlayerTagModule implements Module, Listener {
 
@@ -31,24 +31,23 @@ public class PlayerTagModule implements Module, Listener {
     private void handleRarityTag(AZPlayer azPlayer) {
         Player player = azPlayer.getPlayer();
         if (player.hasPermission("azplugin.rarity")) {
-            azPlayer.getPlayerMeta().setTag(new PactifyTagMetadata());
         } else {
             return;
         }
         if (player.hasPermission("azplugin.rarity.mythic")) {
-            azPlayer.getPlayerMeta().getTag().setRarity(Rarity.MYTHIC);
+            azPlayer.setTag(AZEntityTag.builder().rarity(Rarity.MYTHIC).build());
         } else if (player.hasPermission("azplugin.rarity.legendary")) {
-            azPlayer.getPlayerMeta().getTag().setRarity(Rarity.LEGENDARY);
+            azPlayer.setTag(AZEntityTag.builder().rarity(Rarity.LEGENDARY).build());
         } else if (player.hasPermission("azplugin.rarity.epic")) {
-            azPlayer.getPlayerMeta().getTag().setRarity(Rarity.EPIC);
+            azPlayer.setTag(AZEntityTag.builder().rarity(Rarity.EPIC).build());
         } else if (player.hasPermission("azplugin.rarity.rare")) {
-            azPlayer.getPlayerMeta().getTag().setRarity(Rarity.RARE);
+            azPlayer.setTag(AZEntityTag.builder().rarity(Rarity.RARE).build());
         } else if (player.hasPermission("azplugin.rarity.uncommon")) {
-            azPlayer.getPlayerMeta().getTag().setRarity(Rarity.UNCOMMON);
+            azPlayer.setTag(AZEntityTag.builder().rarity(Rarity.UNCOMMON).build());
         }
         Bukkit.getScheduler().runTaskLaterAsynchronously(
                 Main.getInstance(),
-                () -> azPlayer.updateMeta(),
+                () -> azPlayer.flush(),
                 10L);
     }
 

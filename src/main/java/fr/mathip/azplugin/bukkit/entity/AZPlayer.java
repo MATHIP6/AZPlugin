@@ -171,18 +171,4 @@ public class AZPlayer extends AZEntity {
     public static boolean hasAZLauncher(final Player player) {
         return Main.getAZManager().getPlayer(player).hasLauncher();
     }
-
-    public PLSPPacketEntityMeta getPlayerMeta() {
-        return playerMeta;
-    }
-
-    public void updateMeta() {
-        // This will be removed in the future
-        /*
-         * AZManager.sendPLSPMessage(player, this.playerMeta);
-         * for (Player pl : this.player.getWorld().getPlayers()) {
-         * AZManager.sendPLSPMessage(pl, this.playerMeta);
-         * }
-         */
-    }
 }
