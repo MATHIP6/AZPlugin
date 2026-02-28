@@ -6,7 +6,7 @@
 
     <groupId>fr.mathip</groupId>
     <artifactId>AZPlugin</artifactId>
-    <version>1.4.1</version>
+    <version>1.5.0</version>
     <packaging>jar</packaging>
 
     <name>AZPlugin</name>
