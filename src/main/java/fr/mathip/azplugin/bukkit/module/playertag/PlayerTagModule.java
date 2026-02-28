@@ -3,6 +3,7 @@ package fr.mathip.azplugin.bukkit.module.playertag;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 
@@ -19,7 +20,6 @@ public class PlayerTagModule implements Module, Listener {
 
     public PlayerTagModule() {
         enable = false;
-        Bukkit.getPluginManager().registerEvents(this, Main.getInstance());
     }
 
     @EventHandler
@@ -59,6 +59,11 @@ public class PlayerTagModule implements Module, Listener {
     @Override
     public void setEnable(boolean enable) {
         this.enable = enable;
+        if (enable) {
+            Bukkit.getPluginManager().registerEvents(this, Main.getInstance());
+        } else {
+            HandlerList.unregisterAll(this);
+        }
     }
 
     @Override
