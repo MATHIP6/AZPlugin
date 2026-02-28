@@ -34,7 +34,11 @@ public class PlayerTagModule implements Module, Listener {
         } else {
             return;
         }
-        if (player.hasPermission("azplugin.rarity.mythic")) {
+        if (player.hasPermission("azplugin.rarity.ultimate")) {
+            azPlayer.setTag(AZEntityTag.builder().rarity(Rarity.ULTIMATE).build());
+        } else if (player.hasPermission("azplugin.rarity.cosmic")) {
+            azPlayer.setTag(AZEntityTag.builder().rarity(Rarity.COSMIC).build());
+        } else if (player.hasPermission("azplugin.rarity.mythic")) {
             azPlayer.setTag(AZEntityTag.builder().rarity(Rarity.MYTHIC).build());
         } else if (player.hasPermission("azplugin.rarity.legendary")) {
             azPlayer.setTag(AZEntityTag.builder().rarity(Rarity.LEGENDARY).build());
