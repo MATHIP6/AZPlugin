@@ -52,6 +52,10 @@ public class AZPlayer extends AZEntity {
                 Main.getInstance(),
                 () -> {
                     AZManager.sendPLSPMessage(player, new PLSPPacketReset());
+
+                    ConfigManager.getInstance().getConFlags().applyFlags(player);
+                    ConfigManager.getInstance().applyUIComponents(player);
+
                     List<AZEntity> entities = new ArrayList<>(Main.getAZManager().getEntyties());
                     entities.addAll(Main.getAZManager().getAZPlayers());
                     for (AZEntity azEntity : entities) {
@@ -82,14 +86,6 @@ public class AZPlayer extends AZEntity {
         this.scheduledTasks = new HashSet<Integer>();
         this.player = player;
         this.playerMeta = new PLSPPacketEntityMeta(player.getEntityId());
-        Bukkit.getScheduler().runTaskLater(Main.getInstance(), new Runnable() {
-            @Override
-            public void run() {
-                ConfigManager.getInstance().getConFlags().applyFlags(player);
-                ConfigManager.getInstance().applyUIComponents(player);
-            }
-
-        }, 1);
     }
 
     public Player getPlayer() {
