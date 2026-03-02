@@ -82,6 +82,10 @@ public class AZManager implements Listener, Closeable {
         return entities;
     }
 
+    public List<AZPlayer> getAZPlayers() {
+        return new ArrayList<>(players.values());
+    }
+
     public AZEntity getEntityOrNull(Entity entity) {
         if (entity instanceof Player) {
             return getPlayer((Player) entity);

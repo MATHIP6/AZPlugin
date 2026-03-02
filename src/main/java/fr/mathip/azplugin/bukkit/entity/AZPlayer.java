@@ -15,6 +15,7 @@ import pactify.client.api.plsp.packet.client.PLSPPacketEntityMeta;
 import pactify.client.api.plsp.packet.client.PLSPPacketPlayerMeta;
 import pactify.client.api.plsp.packet.client.PLSPPacketReset;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -49,7 +50,14 @@ public class AZPlayer extends AZEntity {
         BukkitUtil.addChannel(this.player, "PLSP");
         Bukkit.getScheduler().runTaskLaterAsynchronously(
                 Main.getInstance(),
-                () -> AZManager.sendPLSPMessage(player, new PLSPPacketReset()),
+                () -> {
+                    AZManager.sendPLSPMessage(player, new PLSPPacketReset());
+                    List<AZEntity> entities = new ArrayList<>(Main.getAZManager().getEntyties());
+                    entities.addAll(Main.getAZManager().getAZPlayers());
+                    for (AZEntity azEntity : entities) {
+                        azEntity.flush(player);
+                    }
+                },
                 10L);
     }
 
