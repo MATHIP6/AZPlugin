@@ -89,12 +89,6 @@
             <version>1.8.8-R0.1-SNAPSHOT</version>
             <classifier>butchered</classifier>
             <scope>provided</scope>
-            <exclusions>
-                <exclusion>
-                <groupId>*</groupId>
-                <artifactId>*</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
         <dependency>
             <groupId>net.md-5</groupId>
