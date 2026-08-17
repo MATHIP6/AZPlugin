@@ -88,4 +88,9 @@ public class ConfigManager {
         }
     }
 
+    public static String formatMessage(Player player, String message) {
+        message.replaceAll("%player%", player.getName());
+        return message;
+    }
+
 }

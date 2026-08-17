@@ -85,3 +85,4 @@ ui-buttons:
 
 module:
   player-tag: false
+  cosmetic-equipment: false

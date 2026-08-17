@@ -22,6 +22,10 @@ public class AZChatComponent implements NotchianChatComponent {
         this.extra = new ArrayList<>();
     }
 
+    public AZChatComponent() {
+        this.extra = new ArrayList<>();
+    }
+
     public AZChatComponent(TextComponent textComponent) {
         this.text = textComponent.getText();
         this.extra = new ArrayList<>();

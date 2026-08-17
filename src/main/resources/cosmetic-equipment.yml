@@ -1,0 +1,19 @@
+equipments:
+  main-hand:
+    enable: true
+    symbol: "SWORD"
+    tooltip-prefix:
+      text: ""
+      command: ""
+    tooltip-suffix:
+      text: ""
+      command: ""
+  custom-1:
+    enable: true
+    symbol: "BOW"
+    tooltip-prefix:
+      text: "Ceci est un slot cosmétique :D"
+      command: "/kill %player%"
+    tooltip-suffix:
+      text: ""
+      command: ""
