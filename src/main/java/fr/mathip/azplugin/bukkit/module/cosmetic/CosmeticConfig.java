@@ -8,6 +8,7 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import fr.mathip.azplugin.bukkit.Main;
+import fr.mathip.azplugin.bukkit.entity.appearance.AZCosmeticEquipment.ItemMatchFlag;
 import fr.mathip.azplugin.bukkit.entity.appearance.AZCosmeticEquipment.Slot;
 import lombok.Getter;
 
@@ -48,22 +49,34 @@ public class CosmeticConfig {
                 continue;
             }
 
-            EquipmentConfig config2 = new EquipmentConfig();
-            config2.setSymbol(equipment.getString("symbol", ""));
+            EquipmentConfig equipmentConfig = new EquipmentConfig();
+            equipmentConfig.setSymbol(equipment.getString("symbol", ""));
 
             ConfigurationSection tooltipPrefix = equipment.getConfigurationSection("tooltip-prefix");
             if (tooltipPrefix != null) {
-                config2.setTooltipPrefixText(tooltipPrefix.getString("text", null));
-                config2.setTooltipPrefixCommand(tooltipPrefix.getString("command", null));
+                equipmentConfig.setTooltipPrefixText(tooltipPrefix.getString("text", null));
+                equipmentConfig.setTooltipPrefixCommand(tooltipPrefix.getString("command", null));
             }
 
             ConfigurationSection tooltipSuffix = equipment.getConfigurationSection("tooltip-suffix");
             if (tooltipSuffix != null) {
-                config2.setTooltipSuffixText(tooltipSuffix.getString("text", null));
-                config2.setTooltipSuffixCommand(tooltipSuffix.getString("command", null));
+                equipmentConfig.setTooltipSuffixText(tooltipSuffix.getString("text", null));
+                equipmentConfig.setTooltipSuffixCommand(tooltipSuffix.getString("command", null));
             }
 
-            equipments.put(slot, config2);
+            ItemMatchFlag itemMatch;
+            String itemMatchName = equipment.getString("item-match", "NOT-EMPTY");
+            try {
+                itemMatch = ItemMatchFlag.valueOf(itemMatchName.toUpperCase().replace("-", "_"));
+            } catch (IllegalArgumentException e) {
+                Main.getInstance().getLogger()
+                        .warning("[CosmeticEquipment] Unknown item-match flag: " + itemMatchName + " for slot "
+                                + slotName + ", skipping.");
+                continue;
+            }
+            equipmentConfig.setMatch(itemMatch);
+
+            equipments.put(slot, equipmentConfig);
         }
     }
 }

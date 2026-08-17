@@ -8,11 +8,21 @@ equipments:
     tooltip-suffix:
       text: ""
       command: ""
+  head:
+    enable: true
+    item-match: HELMET
+    tooltip-prefix:
+      text: "§dIci l'emplacement du casque :3"
+      command: ""
+    tooltip-suffix:
+      text: ""
+      command: ""
   custom-1:
     enable: true
     symbol: "BOW"
+    item-match: "ANY"
     tooltip-prefix:
-      text: "Ceci est un slot cosmétique :D"
+      text: "§eCeci est un slot cosmétique :D"
       command: "/kill %player%"
     tooltip-suffix:
       text: ""

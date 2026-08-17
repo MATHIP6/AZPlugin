@@ -1,5 +1,7 @@
 package fr.mathip.azplugin.bukkit.entity.appearance;
 
+import java.util.List;
+
 import org.bukkit.inventory.ItemStack;
 
 import fr.mathip.azplugin.bukkit.utils.AZChatComponent;
@@ -12,6 +14,7 @@ import pactify.client.api.mcprotocol.model.NotchianItemStack;
 import pactify.client.api.plprotocol.model.cosmetic.PactifyCosmeticEquipment;
 import pactify.client.api.plprotocol.model.cosmetic.PactifyCosmeticEquipmentSlot;
 import pactify.client.api.plprotocol.model.cosmetic.PactifyCosmeticEquipmentSymbol;
+import pactify.client.api.plprotocol.model.cosmetic.PactifyCosmeticEquipment.ItemPattern;
 
 @Getter
 @Builder(builderClassName = "Builder", toBuilder = true)
@@ -22,6 +25,8 @@ public final class AZCosmeticEquipment {
     private NotchianChatComponent tooltipPrefix;
     private NotchianChatComponent tooltipSuffix;
     private Symbol symbol;
+    @lombok.Builder.Default
+    private ItemMatchFlag itemMatchFlag = ItemMatchFlag.ANY;
 
     public PactifyCosmeticEquipment toPacket() {
         PactifyCosmeticEquipment equipment = new PactifyCosmeticEquipment();
@@ -32,6 +37,53 @@ public final class AZCosmeticEquipment {
         equipment.setTooltipSuffix(tooltipSuffix);
         if (symbol != null) {
             equipment.setSymbol(PactifyCosmeticEquipmentSymbol.valueOf(symbol.name()));
+        }
+
+        if (itemMatchFlag != null) {
+            switch (itemMatchFlag) {
+                case EMPTY:
+                    equipment.setMatchPatterns(List.of(new ItemPattern(ItemPattern.ID0_EMPTY)));
+                    break;
+                case NOT_EMPTY:
+                    equipment.setMatchPatterns(List.of(new ItemPattern(ItemPattern.ID0_NOT_EMPTY)));
+                    break;
+                case SHOVEL:
+                    equipment.setMatchPatterns(List.of(new ItemPattern(ItemPattern.ID0_SHOVEL)));
+                    break;
+                case PICKAXE:
+                    equipment.setMatchPatterns(List.of(new ItemPattern(ItemPattern.ID0_PICKAXE)));
+                    break;
+                case AXE:
+                    equipment.setMatchPatterns(List.of(new ItemPattern(ItemPattern.ID0_AXE)));
+                    break;
+                case SWORD:
+                    equipment.setMatchPatterns(List.of(new ItemPattern(ItemPattern.ID0_SWORD)));
+                    break;
+                case HOE:
+                    equipment.setMatchPatterns(List.of(new ItemPattern(ItemPattern.ID0_HOE)));
+                    break;
+                case HELMET:
+                    equipment.setMatchPatterns(List.of(new ItemPattern(ItemPattern.ID0_HELMET)));
+                    break;
+                case CHESTPLATE:
+                    equipment.setMatchPatterns(List.of(new ItemPattern(ItemPattern.ID0_CHESTPLATE)));
+                    break;
+                case LEGGINGS:
+                    equipment.setMatchPatterns(List.of(new ItemPattern(ItemPattern.ID0_LEGGINGS)));
+                    break;
+                case BOOT:
+                    equipment.setMatchPatterns(List.of(new ItemPattern(ItemPattern.ID0_BOOTS)));
+                    break;
+                case TOOLS:
+                    equipment.setMatchPatterns(List.of(new ItemPattern(ItemPattern.ID0_ANY_TOOL)));
+                    break;
+                case ARMOR:
+                    equipment.setMatchPatterns(List.of(new ItemPattern(ItemPattern.ID0_ANY_ARMOR)));
+                    break;
+                case ANY:
+                default:
+                    break;
+            }
         }
 
         return equipment;
@@ -72,6 +124,40 @@ public final class AZCosmeticEquipment {
             this.tooltipSuffix = tooltipSuffix;
             return this;
         }
+    }
+
+    public enum ItemMatchFlag {
+        ANY,
+        EMPTY,
+        NOT_EMPTY,
+        SHOVEL,
+        PICKAXE,
+        AXE,
+        SWORD,
+        HOE,
+        HELMET,
+        CHESTPLATE,
+        LEGGINGS,
+        BOOT,
+        TOOLS,
+        ARMOR;
+
+        // /**
+        // * A set containing all the tool flags (shovel, pickaxe, axe, sword, hoe).
+        // */
+        // public static final Set<MatchFlag> TOOL = Collections.unmodifiableSet(
+        // EnumSet.of(MatchFlag.SHOVEL, MatchFlag.PICKAXE, MatchFlag.AXE,
+        // MatchFlag.SWORD, MatchFlag.HOE)
+        // );
+        //
+        // /**
+        // * A set containing all the armor flags (helmet, chestplate, leggings, boots).
+        // */
+        // public static final Set<MatchFlag> ARMOR = Collections.unmodifiableSet(
+        // EnumSet.of(MatchFlag.HELMET, MatchFlag.CHESTPLATE, MatchFlag.LEGGINGS,
+        // MatchFlag.BOOTS)
+        // )
+
     }
 
     @Getter
