@@ -3,22 +3,26 @@ package fr.mathip.azplugin.bukkit.entity;
 import fr.mathip.azplugin.bukkit.AZManager;
 import fr.mathip.azplugin.bukkit.Main;
 import fr.mathip.azplugin.bukkit.config.ConfigManager;
+import fr.mathip.azplugin.bukkit.entity.appearance.AZCosmeticEquipment;
+import fr.mathip.azplugin.bukkit.entity.appearance.AZCosmeticEquipment.Slot;
 import fr.mathip.azplugin.bukkit.utils.BukkitUtil;
 import fr.mathip.azplugin.bukkit.utils.SchedulerUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.metadata.MetadataValue;
-import pactify.client.api.plprotocol.metadata.ImmutablePactifyModelMetadata;
-import pactify.client.api.plprotocol.metadata.PactifyModelMetadata;
 import pactify.client.api.plsp.packet.client.PLSPPacketAbstractMeta;
 import pactify.client.api.plsp.packet.client.PLSPPacketEntityMeta;
+import pactify.client.api.plsp.packet.client.PLSPPacketPlayerCosmeticEquipment;
 import pactify.client.api.plsp.packet.client.PLSPPacketPlayerMeta;
 import pactify.client.api.plsp.packet.client.PLSPPacketReset;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
+import java.util.Map.Entry;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -30,9 +34,22 @@ public class AZPlayer extends AZEntity {
     private int launcherProtocolVersion;
 
     private PLSPPacketEntityMeta playerMeta;
+    private Map<Slot, AZCosmeticEquipment> cosmeticEquipments = new HashMap<>();
 
     static {
         AZ_HOSTNAME_PATTERN = Pattern.compile("[\u0000\u0002]PAC([0-9A-F]{5})[\u0000\u0002]");
+    }
+
+    @Override
+    public void flush(Player player) {
+        AZManager.sendPLSPMessage(player, createMetadataPacket());
+        for (Entry<Slot, AZCosmeticEquipment> equipment : cosmeticEquipments.entrySet()) {
+            PLSPPacketPlayerCosmeticEquipment equipmentPacket = new PLSPPacketPlayerCosmeticEquipment(
+                    player.getUniqueId(),
+                    equipment.getKey().toPLSP(),
+                    equipment.getValue().toPacket());
+            AZManager.sendPLSPMessage(player, equipmentPacket);
+        }
     }
 
     public void init() {
@@ -98,6 +115,10 @@ public class AZPlayer extends AZEntity {
 
     public boolean isJoined() {
         return this.joined;
+    }
+
+    public void setCosmeticEquipment(Slot slot, AZCosmeticEquipment equipment) {
+        cosmeticEquipments.put(slot, equipment);
     }
 
     @Override
