@@ -45,11 +45,16 @@ public class AZPlayer extends AZEntity {
         AZManager.sendPLSPMessage(player, createMetadataPacket());
         for (Entry<Slot, AZCosmeticEquipment> equipment : cosmeticEquipments.entrySet()) {
             PLSPPacketPlayerCosmeticEquipment equipmentPacket = new PLSPPacketPlayerCosmeticEquipment(
-                    player.getUniqueId(),
+                    this.player.getUniqueId(),
                     equipment.getKey().toPLSP(),
                     equipment.getValue().toPacket());
             AZManager.sendPLSPMessage(player, equipmentPacket);
         }
+    }
+
+    @Override
+    public void flush() {
+        Bukkit.getOnlinePlayers().forEach(player -> flush(player));
     }
 
     public void init() {
