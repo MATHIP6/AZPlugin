@@ -85,6 +85,8 @@ public final class Main extends JavaPlugin {
         commandManager.addItemCommand(new ItemArmorCommand());
         commandManager.addItemCommand(new ItemTextCommand());
         commandManager.addItemCommand(new ItemRarityCommand());
+
+        commandManager.addCommand(new AZHeadCommand());
     }
 
     public static AZManager getAZManager() {
