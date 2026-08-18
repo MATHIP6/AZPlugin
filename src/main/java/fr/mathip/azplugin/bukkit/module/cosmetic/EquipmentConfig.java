@@ -1,6 +1,7 @@
 package fr.mathip.azplugin.bukkit.module.cosmetic;
 
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 
 import fr.mathip.azplugin.bukkit.entity.appearance.AZCosmeticEquipment;
 import fr.mathip.azplugin.bukkit.entity.appearance.AZCosmeticEquipment.ItemMatchFlag;
@@ -16,10 +17,20 @@ public class EquipmentConfig {
     private String tooltipPrefixCommand;
     private String tooltipSuffixText;
     private String tooltipSuffixCommand;
-    private ItemMatchFlag match;
 
     public AZCosmeticEquipment build(Player player) {
+        return build(player, null);
+    }
+
+    public AZCosmeticEquipment build(Player player, ItemStack item) {
         AZCosmeticEquipment.Builder builder = AZCosmeticEquipment.builder();
+
+        if (item != null) {
+            builder.item(item);
+            builder.itemMatchFlag(ItemMatchFlag.ANY);
+        } else {
+            builder.itemMatchFlag(ItemMatchFlag.NOT_EMPTY);
+        }
 
         if (symbol != null && !symbol.isEmpty()) {
             builder.symbol(Symbol.valueOf(symbol));
@@ -41,10 +52,6 @@ public class EquipmentConfig {
                         tooltipSuffixCommand.replace("%player%", player.getName())));
             }
             builder.tooltipSuffix(suffix);
-        }
-
-        if (match != null) {
-            builder.itemMatchFlag(match);
         }
 
         return builder.build();

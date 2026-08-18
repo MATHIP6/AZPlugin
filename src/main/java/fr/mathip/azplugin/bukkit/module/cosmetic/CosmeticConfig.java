@@ -8,7 +8,6 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import fr.mathip.azplugin.bukkit.Main;
-import fr.mathip.azplugin.bukkit.entity.appearance.AZCosmeticEquipment.ItemMatchFlag;
 import fr.mathip.azplugin.bukkit.entity.appearance.AZCosmeticEquipment.Slot;
 import lombok.Getter;
 
@@ -63,18 +62,6 @@ public class CosmeticConfig {
                 equipmentConfig.setTooltipSuffixText(tooltipSuffix.getString("text", null));
                 equipmentConfig.setTooltipSuffixCommand(tooltipSuffix.getString("command", null));
             }
-
-            ItemMatchFlag itemMatch;
-            String itemMatchName = equipment.getString("item-match", "NOT-EMPTY");
-            try {
-                itemMatch = ItemMatchFlag.valueOf(itemMatchName.toUpperCase().replace("-", "_"));
-            } catch (IllegalArgumentException e) {
-                Main.getInstance().getLogger()
-                        .warning("[CosmeticEquipment] Unknown item-match flag: " + itemMatchName + " for slot "
-                                + slotName + ", skipping.");
-                continue;
-            }
-            equipmentConfig.setMatch(itemMatch);
 
             equipments.put(slot, equipmentConfig);
         }

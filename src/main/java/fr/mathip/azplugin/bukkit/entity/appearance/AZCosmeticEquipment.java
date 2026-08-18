@@ -1,5 +1,6 @@
 package fr.mathip.azplugin.bukkit.entity.appearance;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.bukkit.inventory.ItemStack;
@@ -25,8 +26,7 @@ public final class AZCosmeticEquipment {
     private NotchianChatComponent tooltipPrefix;
     private NotchianChatComponent tooltipSuffix;
     private Symbol symbol;
-    @lombok.Builder.Default
-    private ItemMatchFlag itemMatchFlag = ItemMatchFlag.ANY;
+    private List<ItemMatchFlag> itemMatchFlags;
 
     public PactifyCosmeticEquipment toPacket() {
         PactifyCosmeticEquipment equipment = new PactifyCosmeticEquipment();
@@ -39,50 +39,57 @@ public final class AZCosmeticEquipment {
             equipment.setSymbol(PactifyCosmeticEquipmentSymbol.valueOf(symbol.name()));
         }
 
-        if (itemMatchFlag != null) {
-            switch (itemMatchFlag) {
-                case EMPTY:
-                    equipment.setMatchPatterns(List.of(new ItemPattern(ItemPattern.ID0_EMPTY)));
-                    break;
-                case NOT_EMPTY:
-                    equipment.setMatchPatterns(List.of(new ItemPattern(ItemPattern.ID0_NOT_EMPTY)));
-                    break;
-                case SHOVEL:
-                    equipment.setMatchPatterns(List.of(new ItemPattern(ItemPattern.ID0_SHOVEL)));
-                    break;
-                case PICKAXE:
-                    equipment.setMatchPatterns(List.of(new ItemPattern(ItemPattern.ID0_PICKAXE)));
-                    break;
-                case AXE:
-                    equipment.setMatchPatterns(List.of(new ItemPattern(ItemPattern.ID0_AXE)));
-                    break;
-                case SWORD:
-                    equipment.setMatchPatterns(List.of(new ItemPattern(ItemPattern.ID0_SWORD)));
-                    break;
-                case HOE:
-                    equipment.setMatchPatterns(List.of(new ItemPattern(ItemPattern.ID0_HOE)));
-                    break;
-                case HELMET:
-                    equipment.setMatchPatterns(List.of(new ItemPattern(ItemPattern.ID0_HELMET)));
-                    break;
-                case CHESTPLATE:
-                    equipment.setMatchPatterns(List.of(new ItemPattern(ItemPattern.ID0_CHESTPLATE)));
-                    break;
-                case LEGGINGS:
-                    equipment.setMatchPatterns(List.of(new ItemPattern(ItemPattern.ID0_LEGGINGS)));
-                    break;
-                case BOOT:
-                    equipment.setMatchPatterns(List.of(new ItemPattern(ItemPattern.ID0_BOOTS)));
-                    break;
-                case TOOLS:
-                    equipment.setMatchPatterns(List.of(new ItemPattern(ItemPattern.ID0_ANY_TOOL)));
-                    break;
-                case ARMOR:
-                    equipment.setMatchPatterns(List.of(new ItemPattern(ItemPattern.ID0_ANY_ARMOR)));
-                    break;
-                case ANY:
-                default:
-                    break;
+        List<ItemPattern> itemPatterns = new ArrayList<>();
+        for (ItemMatchFlag itemMatchFlag : itemMatchFlags) {
+
+            if (itemMatchFlag != null) {
+                switch (itemMatchFlag) {
+                    case EMPTY:
+                        itemPatterns.add(new ItemPattern(ItemPattern.ID0_EMPTY));
+                        break;
+                    case NOT_EMPTY:
+                        itemPatterns.add(new ItemPattern(ItemPattern.ID0_NOT_EMPTY));
+                        break;
+                    case SHOVEL:
+                        itemPatterns.add(new ItemPattern(ItemPattern.ID0_SHOVEL));
+                        break;
+                    case PICKAXE:
+                        itemPatterns.add(new ItemPattern(ItemPattern.ID0_PICKAXE));
+                        break;
+                    case AXE:
+                        itemPatterns.add(new ItemPattern(ItemPattern.ID0_AXE));
+                        break;
+                    case SWORD:
+                        itemPatterns.add(new ItemPattern(ItemPattern.ID0_SWORD));
+                        break;
+                    case HOE:
+                        itemPatterns.add(new ItemPattern(ItemPattern.ID0_HOE));
+                        break;
+                    case HELMET:
+                        itemPatterns.add(new ItemPattern(ItemPattern.ID0_HELMET));
+                        break;
+                    case CHESTPLATE:
+                        itemPatterns.add(new ItemPattern(ItemPattern.ID0_CHESTPLATE));
+                        break;
+                    case LEGGINGS:
+                        itemPatterns.add(new ItemPattern(ItemPattern.ID0_LEGGINGS));
+                        break;
+                    case BOOT:
+                        itemPatterns.add(new ItemPattern(ItemPattern.ID0_BOOTS));
+                        break;
+                    case TOOLS:
+                        itemPatterns.add(new ItemPattern(ItemPattern.ID0_ANY_TOOL));
+                        break;
+                    case ARMOR:
+                        itemPatterns.add(new ItemPattern(ItemPattern.ID0_ANY_ARMOR));
+                        break;
+                    case ANY:
+                    default:
+                        break;
+                }
+            }
+            if (!itemPatterns.isEmpty()) {
+                equipment.setMatchPatterns(itemPatterns);
             }
         }
 
@@ -122,6 +129,16 @@ public final class AZCosmeticEquipment {
 
         public Builder tooltipSuffix(AZChatComponent tooltipSuffix) {
             this.tooltipSuffix = tooltipSuffix;
+            return this;
+        }
+
+        public Builder itemMatchFlag(ItemMatchFlag flag) {
+            this.itemMatchFlags = List.of(flag);
+            return this;
+        }
+
+        public Builder itemMatchFlag(ItemMatchFlag... flags) {
+            this.itemMatchFlags = List.of(flags);
             return this;
         }
     }

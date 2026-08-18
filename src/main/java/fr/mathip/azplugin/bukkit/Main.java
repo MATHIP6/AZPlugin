@@ -77,6 +77,7 @@ public final class Main extends JavaPlugin {
         commandManager.addCommand(new AZSupTag());
         commandManager.addCommand(new AZSummon());
         commandManager.addCommand(new AZPopup());
+        commandManager.addCommand(new AZCosmeticCommand());
         commandManager.addCommand(new AZReload());
         commandManager.addCommand(new AZItemCommand());
         commandManager.addItemCommand(new ItemRenderCommand());
