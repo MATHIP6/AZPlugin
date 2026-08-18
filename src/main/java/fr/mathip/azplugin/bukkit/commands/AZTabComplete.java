@@ -23,7 +23,7 @@ public class AZTabComplete implements TabCompleter {
                 List<String> completion = new ArrayList<>();
                 List<String> commands = new ArrayList<>();
                 for (AZCommand azCommand : CommandManager.getInstance().getCommands().values()) {
-                    completion.add(azCommand.name());
+                    commands.add(azCommand.name());
                 }
                 for (String arg : commands) {
                     if (arg.startsWith(args[0])) {

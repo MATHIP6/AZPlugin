@@ -15,13 +15,13 @@ public class CommandManager implements CommandExecutor {
     private static CommandManager instance;
 
     public CommandManager() {
+        instance = this;
         commands = new HashMap<>();
         itemCommands = new HashMap<>();
     }
 
     @Override
     public boolean onCommand(CommandSender commandSender, Command command, String s, String[] args) {
-        instance = this;
         if (s.equalsIgnoreCase("az")) {
             if (args.length == 0) {
                 commandSender.sendMessage("§a[AZPlugin]§e Liste des commandes:");
