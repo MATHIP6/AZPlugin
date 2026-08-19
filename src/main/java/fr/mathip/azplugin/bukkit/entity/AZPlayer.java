@@ -15,6 +15,7 @@ import pactify.client.api.plsp.packet.client.PLSPPacketEntityMeta;
 import pactify.client.api.plsp.packet.client.PLSPPacketPlayerCosmeticEquipment;
 import pactify.client.api.plsp.packet.client.PLSPPacketPlayerMeta;
 import pactify.client.api.plsp.packet.client.PLSPPacketReset;
+import pactify.client.api.plsp.packet.client.PLSPPacketUiAction;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -22,6 +23,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.UUID;
 import java.util.Map.Entry;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -124,6 +126,43 @@ public class AZPlayer extends AZEntity {
 
     public void setCosmeticEquipment(Slot slot, AZCosmeticEquipment equipment) {
         cosmeticEquipments.put(slot, equipment);
+    }
+
+    public void openLoadingScreen() {
+        openLoadingScreen(null);
+    }
+
+    public void openLoadingScreen(UUID id) {
+        openLoadingScreen(id, 0, true);
+    }
+
+    public void openLoadingScreen(UUID id, int autoCloseDelay, boolean canEscape) {
+        StringBuilder params = new StringBuilder();
+        if (id != null) {
+            params.append("id=").append(id);
+        }
+        if (autoCloseDelay > 0) {
+            if (params.length() > 0) {
+                params.append('&');
+            }
+            params.append("delay=").append(autoCloseDelay);
+        }
+        if (!canEscape) {
+            if (params.length() > 0) {
+                params.append('&');
+            }
+            params.append("noesc");
+        }
+        AZManager.sendPLSPMessage(player, new PLSPPacketUiAction("open_load", params.toString()));
+    }
+
+    public void closeLoadingScreen() {
+        closeLoadingScreen(null);
+    }
+
+    public void closeLoadingScreen(UUID id) {
+        String params = (id == null) ? "" : "id=" + id;
+        AZManager.sendPLSPMessage(player, new PLSPPacketUiAction("close_load", params));
     }
 
     @Override
