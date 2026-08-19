@@ -4,7 +4,9 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
+import fr.mathip.azplugin.bukkit.Main;
 import fr.mathip.azplugin.bukkit.head.AZHeadManager;
+import fr.mathip.azplugin.bukkit.head.HeadMenu;
 
 public class AZHeadCommand implements AZCommand {
 
@@ -33,6 +35,7 @@ public class AZHeadCommand implements AZCommand {
         if (args.length == 1) {
             sender.sendMessage("§a[AZHead]§e Liste des commandes:");
             sender.sendMessage("§a /az head transparent :§e Rend transparent les pixels d'une tête");
+            sender.sendMessage("§a /az head menu :§e Ouvre le menu de têtes transparentes");
             return;
         }
         if (args[1].equalsIgnoreCase("transparent")) {
@@ -55,10 +58,13 @@ public class AZHeadCommand implements AZCommand {
                     e.printStackTrace();
                 }
             }
-            // } catch Exception {
-            // player.sendMessage("§cErreur: L'item que vous avez n'est pas une tête");
-            // return;
-            // }
+        } else if (args[1].equalsIgnoreCase("menu")) {
+            HeadMenu headMenu = Main.getInstance().getHeadMenu();
+            if (headMenu == null) {
+                player.sendMessage("§cErreur: Le menu de têtes n'est pas disponible");
+                return;
+            }
+            headMenu.open(player);
         }
     }
 

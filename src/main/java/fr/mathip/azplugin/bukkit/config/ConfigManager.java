@@ -3,7 +3,6 @@ package fr.mathip.azplugin.bukkit.config;
 import fr.mathip.azplugin.bukkit.AZManager;
 import fr.mathip.azplugin.bukkit.Main;
 import fr.mathip.azplugin.bukkit.PacketUiComponent;
-import fr.mathip.azplugin.bukkit.module.ModuleManager;
 import fr.mathip.azplugin.bukkit.utils.AZChatComponent;
 import lombok.Getter;
 import org.bukkit.configuration.ConfigurationSection;
@@ -34,6 +33,8 @@ public class ConfigManager {
 
     private boolean updateMessage;
 
+    private String headApiUrl;
+
     public ConfigManager(Main main) {
         this.config = main.getConfig();
         instance = this;
@@ -41,6 +42,7 @@ public class ConfigManager {
         joinWithoutAZCommands = new ArrayList<>();
         specialInventoryCharacters = new ArrayList<>();
         UIComponents = new ArrayList<>();
+        headApiUrl = "http://head-api.mathip.dev";
         loadConfig();
     }
 
@@ -57,6 +59,8 @@ public class ConfigManager {
         specialInventoryCharacters = (ArrayList<String>) config.get("special-transparent-inventory-character");
 
         popupConfig = new PopupConfig(Main.getInstance());
+
+        headApiUrl = config.getString("head-api-url", "http://head-api.mathip.dev");
 
         UIComponents = new ArrayList<>();
         ConfigurationSection uiSection = config.getConfigurationSection("ui-buttons");

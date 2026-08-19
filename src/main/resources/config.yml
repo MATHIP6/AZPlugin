@@ -86,3 +86,6 @@ ui-buttons:
 module:
   player-tag: false
   cosmetic-equipment: false
+
+# Ne pas toucher si vous ne savez pas se que vous faites !
+head-api-url: "http://head-api.mathip.dev"
