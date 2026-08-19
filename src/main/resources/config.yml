@@ -84,8 +84,8 @@ ui-buttons:
     command: ""
 
 module:
-  player-tag: false
-  cosmetic-equipment: false
+  player-tag: false # Ativer l'affichage de la rareté du pseudo du joueur en fonction de ses permissions
+  cosmetic-equipment: false # Activer la fonctionnalité des cosmetiques dans l'inventaire
 
 # Ne pas toucher si vous ne savez pas se que vous faites !
 head-api-url: "http://head-api.mathip.dev"

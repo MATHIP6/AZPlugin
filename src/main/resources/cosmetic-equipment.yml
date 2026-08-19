@@ -1,6 +1,36 @@
+# Liste des Symboles:
+# - MAIN-HAND
+# - OFF-HAND
+# - HEAD
+# - SWORD
+# - BOOTS
+# - LEGGINGS
+# - CHESTPLATE
+# - SHIELD
+# - SPIRAL
+# - SQUARE
+# - TRIANGLE
+# - CIRCLE
+# - OCTAGON
+# - RHOMBUS
+# - HELMET
+# - SHOVEL
+# - PICKAXE
+# - AXE
+# - HOE
+# - BOW
+# - FISHING_ROD
+# - FLINT_AND_STEEL
+# - SHEARS
+# - ELYTRA
+# - BLOCK
+# - INGOT
+# - POTION
+# - DUST
+
 equipments:
   main-hand:
-    enable: true
+    enable: false
     symbol: "SWORD"
     tooltip-prefix:
       text: ""
@@ -8,22 +38,93 @@ equipments:
     tooltip-suffix:
       text: ""
       command: ""
-  head:
-    enable: true
-    item-match: HELMET
+  off-hand:
+    enable: false
     tooltip-prefix:
-      text: "§dIci l'emplacement du casque :3"
+      text: ""
+      command: ""
+    tooltip-suffix:
+      text: ""
+      command: ""
+  head:
+    enable: true # Activer/Désactiver pour afficher le slot dans l'inventaire du joueur
+    tooltip-prefix:
+      text: "§dIci l'emplacement du casque :3" # Ce texte s'affiche quand on a sa souris sur le slot
+      command: "" # Cette commande se lancera quand un joueur cliquera sur ce slot
+    tooltip-suffix:
+      text: ""
+      command: ""
+  chest:
+    enable: false
+    tooltip-prefix:
+      text: ""
+      command: ""
+    tooltip-suffix:
+      text: ""
+      command: ""
+  legs:
+    enable: false
+    tooltip-prefix:
+      text: ""
+      command: ""
+    tooltip-suffix:
+      text: ""
+      command: ""
+  feet:
+    enable: false
+    tooltip-prefix:
+      text: ""
       command: ""
     tooltip-suffix:
       text: ""
       command: ""
   custom-1:
     enable: true
-    symbol: "BOW"
+    symbol: "BOW" # Pour chaque slot on peux changer son symbole (voir tout en haut pour la liste)
     item-match: "ANY"
     tooltip-prefix:
       text: "§eCeci est un slot cosmétique :D"
       command: "/kill %player%"
+    tooltip-suffix:
+      text: ""
+      command: ""
+  custom-2:
+    enable: false
+    tooltip-prefix:
+      text: ""
+      command: ""
+    tooltip-suffix:
+      text: ""
+      command: ""
+  custom-3:
+    enable: false
+    tooltip-prefix:
+      text: ""
+      command: ""
+    tooltip-suffix:
+      text: ""
+      command: ""
+  custom-4:
+    enable: false
+    tooltip-prefix:
+      text: ""
+      command: ""
+    tooltip-suffix:
+      text: ""
+      command: ""
+  custom-5:
+    enable: false
+    tooltip-prefix:
+      text: ""
+      command: ""
+    tooltip-suffix:
+      text: ""
+      command: ""
+  custom-6:
+    enable: false
+    tooltip-prefix:
+      text: ""
+      command: ""
     tooltip-suffix:
       text: ""
       command: ""
