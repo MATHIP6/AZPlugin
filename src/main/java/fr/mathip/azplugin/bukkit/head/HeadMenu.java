@@ -18,6 +18,9 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
+import fr.mathip.azplugin.bukkit.Main;
+import fr.mathip.azplugin.bukkit.entity.AZPlayer;
+
 public class HeadMenu implements Listener {
 
     private static final String MENU_TITLE = "Têtes custom";
@@ -40,41 +43,30 @@ public class HeadMenu implements Listener {
 
     public void open(Player player, int page) {
         playerPages.put(player.getUniqueId(), page);
-        Inventory inventory = Bukkit.createInventory(null, ROWS * 9, MENU_TITLE);
 
-        ItemStack filler = createFiller();
-        for (int i = 0; i < ROWS * 9; i++) {
-            inventory.setItem(i, filler.clone());
+        AZPlayer azPlayer = Main.getAZManager().getPlayer(player);
+        if (azPlayer != null) {
+            azPlayer.openLoadingScreen();
         }
 
-        inventory.setItem(PREV_BUTTON_SLOT, createNavigationButton("Page précédente"));
-        inventory.setItem(NEXT_BUTTON_SLOT, createNavigationButton("§aPage suivante"));
-
-        openMenus.add(player.getUniqueId());
-        player.openInventory(inventory);
-
-        loadHeads(player, page);
-    }
-
-    private void loadHeads(Player player, int page) {
         apiClient.fetchHeads(page).thenAccept(response -> {
-            Bukkit.getScheduler().runTask(Bukkit.getPluginManager().getPlugin("AZPlugin"), () -> {
-                if (!openMenus.contains(player.getUniqueId()))
-                    return;
-                if (!player.isOnline())
-                    return;
+            Bukkit.getScheduler().runTask(Main.getInstance(), () -> {
+                if (!player.isOnline()) return;
 
-                Inventory inventory = player.getOpenInventory().getTopInventory();
-                if (inventory == null || !inventory.getTitle().equals(MENU_TITLE))
-                    return;
-
-                for (int i = 0; i < HEAD_SLOTS; i++) {
-                    inventory.setItem(i, null);
+                if (azPlayer != null) {
+                    azPlayer.closeLoadingScreen();
                 }
 
                 if (response == null || response.getHeads().isEmpty()) {
                     player.sendMessage("§cErreur: Impossible de charger les têtes depuis Internet");
                     return;
+                }
+
+                Inventory inventory = Bukkit.createInventory(null, ROWS * 9, MENU_TITLE);
+
+                ItemStack filler = createFiller();
+                for (int i = 0; i < ROWS * 9; i++) {
+                    inventory.setItem(i, filler.clone());
                 }
 
                 for (int i = 0; i < response.getHeads().size() && i < HEAD_SLOTS; i++) {
@@ -83,26 +75,28 @@ public class HeadMenu implements Listener {
                     inventory.setItem(i, headItem);
                 }
 
-                ItemStack prevButton = inventory.getItem(PREV_BUTTON_SLOT);
-                ItemStack nextButton = inventory.getItem(NEXT_BUTTON_SLOT);
+                inventory.setItem(PREV_BUTTON_SLOT, createNavigationButton("§a§l⟨ §aPage précédente"));
+                inventory.setItem(NEXT_BUTTON_SLOT, createNavigationButton("§aPage suivante §l⟩"));
 
                 if (page <= 1) {
-                    inventory.setItem(PREV_BUTTON_SLOT,
-                            createDisabledButton("§7Page précédente"));
+                    inventory.setItem(PREV_BUTTON_SLOT, createDisabledButton("§7§l⟨ §8Page précédente"));
                 }
                 if (page >= response.getTotalPages()) {
-                    inventory.setItem(NEXT_BUTTON_SLOT, createDisabledButton("§7Page suivante"));
+                    inventory.setItem(NEXT_BUTTON_SLOT, createDisabledButton("§8Page suivante §7§l⟩"));
                 }
 
-                ItemMeta nextMeta = nextButton.getItemMeta();
+                ItemMeta nextMeta = inventory.getItem(NEXT_BUTTON_SLOT).getItemMeta();
                 if (nextMeta != null && page < response.getTotalPages()) {
                     String pageInfo = "§ePage " + page + "/" + response.getTotalPages();
                     java.util.List<String> lore = new java.util.ArrayList<>();
                     lore.add(pageInfo);
-                    lore.add("§7e" + response.getTotal() + " têtes au total");
+                    lore.add("§7" + response.getTotal() + " tête(s) au total");
                     nextMeta.setLore(lore);
-                    nextButton.setItemMeta(nextMeta);
+                    inventory.getItem(NEXT_BUTTON_SLOT).setItemMeta(nextMeta);
                 }
+
+                openMenus.add(player.getUniqueId());
+                player.openInventory(inventory);
             });
         });
     }
