@@ -17,6 +17,7 @@ public class EquipmentConfig {
     private String tooltipPrefixCommand;
     private String tooltipSuffixText;
     private String tooltipSuffixCommand;
+    private int menuSlot = -1;
 
     public AZCosmeticEquipment build(Player player) {
         return build(player, null);

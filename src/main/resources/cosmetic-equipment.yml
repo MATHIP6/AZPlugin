@@ -31,6 +31,7 @@
 equipments:
   main-hand:
     enable: false
+    menu-slot: 10 # numéro de slot dans le menu (/az cosmetic) entre 0 et 26
     symbol: "SWORD"
     tooltip-prefix:
       text: ""
@@ -40,6 +41,7 @@ equipments:
       command: ""
   off-hand:
     enable: false
+    menu-slot: 12
     tooltip-prefix:
       text: ""
       command: ""
@@ -47,15 +49,17 @@ equipments:
       text: ""
       command: ""
   head:
-    enable: true # Activer/Désactiver pour afficher le slot dans l'inventaire du joueur
+    enable: true
+    menu-slot: 11
     tooltip-prefix:
-      text: "§dIci l'emplacement du casque :3" # Ce texte s'affiche quand on a sa souris sur le slot
-      command: "" # Cette commande se lancera quand un joueur cliquera sur ce slot
+      text: "§dIci l'emplacement du casque :3"
+      command: ""
     tooltip-suffix:
       text: ""
       command: ""
   chest:
     enable: false
+    menu-slot: 21
     tooltip-prefix:
       text: ""
       command: ""
@@ -64,6 +68,7 @@ equipments:
       command: ""
   legs:
     enable: false
+    menu-slot: 20
     tooltip-prefix:
       text: ""
       command: ""
@@ -72,6 +77,7 @@ equipments:
       command: ""
   feet:
     enable: false
+    menu-slot: 19
     tooltip-prefix:
       text: ""
       command: ""
@@ -80,7 +86,8 @@ equipments:
       command: ""
   custom-1:
     enable: true
-    symbol: "BOW" # Pour chaque slot on peux changer son symbole (voir tout en haut pour la liste)
+    menu-slot: 14
+    symbol: "BOW"
     item-match: "ANY"
     tooltip-prefix:
       text: "§eCeci est un slot cosmétique :D"
@@ -90,6 +97,7 @@ equipments:
       command: ""
   custom-2:
     enable: false
+    menu-slot: 23
     tooltip-prefix:
       text: ""
       command: ""
@@ -98,6 +106,7 @@ equipments:
       command: ""
   custom-3:
     enable: false
+    menu-slot: 15
     tooltip-prefix:
       text: ""
       command: ""
@@ -106,6 +115,7 @@ equipments:
       command: ""
   custom-4:
     enable: false
+    menu-slot: 24
     tooltip-prefix:
       text: ""
       command: ""
@@ -114,6 +124,7 @@ equipments:
       command: ""
   custom-5:
     enable: false
+    menu-slot: 16
     tooltip-prefix:
       text: ""
       command: ""
@@ -122,6 +133,7 @@ equipments:
       command: ""
   custom-6:
     enable: false
+    menu-slot: 25
     tooltip-prefix:
       text: ""
       command: ""

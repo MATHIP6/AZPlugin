@@ -168,23 +168,13 @@ public class CosmeticMenu implements Listener {
     private Map<Slot, Integer> buildLayout() {
         Map<Slot, Integer> layout = new HashMap<>();
 
-        layout.put(Slot.MAIN_HAND, 10);
-        layout.put(Slot.HEAD, 11);
-        layout.put(Slot.OFF_HAND, 12);
+        for (Map.Entry<Slot, EquipmentConfig> entry : equipmentConfigs.entrySet()) {
+            int menuSlot = entry.getValue().getMenuSlot();
+            if (menuSlot >= 0 && menuSlot < ROWS * 9) {
+                layout.put(entry.getKey(), menuSlot);
+            }
+        }
 
-        layout.put(Slot.FEET, 19);
-        layout.put(Slot.LEGS, 20);
-        layout.put(Slot.CHEST, 21);
-
-        layout.put(Slot.CUSTOM_1, 14);
-        layout.put(Slot.CUSTOM_3, 15);
-        layout.put(Slot.CUSTOM_5, 16);
-
-        layout.put(Slot.CUSTOM_2, 23);
-        layout.put(Slot.CUSTOM_4, 24);
-        layout.put(Slot.CUSTOM_6, 25);
-
-        layout.keySet().removeIf(slot -> !equipmentConfigs.containsKey(slot));
         return layout;
     }
 
