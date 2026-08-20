@@ -10,6 +10,7 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import pactify.client.api.plsp.packet.client.PLSPPacketUiComponent;
 
+import java.io.File;
 import java.util.ArrayList;
 
 @Getter
@@ -49,6 +50,13 @@ public class ConfigManager {
     public void loadConfig() {
         Main.getInstance().reloadConfig();
         config = Main.getInstance().getConfig();
+
+        File configFile = new File(Main.getInstance().getDataFolder(), "config.yml");
+        ConfigMigration migration = new ConfigMigration(configFile, Main.getInstance().getLogger());
+        migration.migrate(config);
+        Main.getInstance().reloadConfig();
+        config = Main.getInstance().getConfig();
+
         joinWithAZCommands = (ArrayList<String>) config.get("join-with-az-commands");
         joinWithoutAZCommands = (ArrayList<String>) config.get("join-without-az-commands");
         conFlags = new ConfFlags();
