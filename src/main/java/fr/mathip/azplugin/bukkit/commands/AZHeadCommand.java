@@ -39,6 +39,12 @@ public class AZHeadCommand implements AZCommand {
             return;
         }
         if (args[1].equalsIgnoreCase("transparent")) {
+
+            if (!sender.hasPermission("azplugin.command.head.transparent")) {
+                sender.sendMessage("§cVous n'avez pas la permission d'utiliser cette commande !");
+                return;
+            }
+
             ItemStack item = player.getItemInHand();
             if (item == null) {
                 player.sendMessage("§cErreur: Vous devez tenir une tête");
@@ -59,6 +65,12 @@ public class AZHeadCommand implements AZCommand {
                 }
             }
         } else if (args[1].equalsIgnoreCase("menu")) {
+
+            if (!sender.hasPermission("azplugin.command.head.menu")) {
+                sender.sendMessage("§cVous n'avez pas la permission d'utiliser cette commande !");
+                return;
+            }
+
             HeadMenu headMenu = Main.getInstance().getHeadMenu();
             if (headMenu == null) {
                 player.sendMessage("§cErreur: Le menu de têtes n'est pas disponible");

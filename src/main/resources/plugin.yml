@@ -46,6 +46,21 @@ permissions:
   azplugin.command.seechunks:
     description: Permission pour la sous-commande 1
     default: op
+  azplugin.command.head:
+    description: Permission pour la sous-commande head
+    default: op
+  azplugin.command.head.transparent:
+    description: Permission pour la sous-commande head transparent
+    default: op
+  azplugin.command.head.menu:
+    description: Permission pour la sous-commande head menu
+    default: op
+  azplugin.command.cosmetic:
+    description: Permission pour la sous-commande du module cosmetic
+    default: op
+  azplugin.command.cosmetic.menu:
+    description: Permission pour la sous-commande cosmetique menu
+    default: op
   azplugin.command.item:
     description: Permission pour la sous-commande item
     default: op
