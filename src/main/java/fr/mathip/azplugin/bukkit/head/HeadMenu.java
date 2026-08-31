@@ -18,6 +18,8 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
+import de.tr7zw.changeme.nbtapi.NBTContainer;
+import de.tr7zw.changeme.nbtapi.NBTItem;
 import fr.mathip.azplugin.bukkit.Main;
 import fr.mathip.azplugin.bukkit.entity.AZPlayer;
 
@@ -51,7 +53,8 @@ public class HeadMenu implements Listener {
 
         apiClient.fetchHeads(page).thenAccept(response -> {
             Bukkit.getScheduler().runTask(Main.getInstance(), () -> {
-                if (!player.isOnline()) return;
+                if (!player.isOnline())
+                    return;
 
                 if (azPlayer != null) {
                     azPlayer.closeLoadingScreen();
@@ -75,8 +78,8 @@ public class HeadMenu implements Listener {
                     inventory.setItem(i, headItem);
                 }
 
-                inventory.setItem(PREV_BUTTON_SLOT, createNavigationButton("§a§l⟨ §aPage précédente"));
-                inventory.setItem(NEXT_BUTTON_SLOT, createNavigationButton("§aPage suivante §l⟩"));
+                inventory.setItem(PREV_BUTTON_SLOT, createPreviousNavigationButton());
+                inventory.setItem(NEXT_BUTTON_SLOT, createNextNavigationButton());
 
                 if (page <= 1) {
                     inventory.setItem(PREV_BUTTON_SLOT, createDisabledButton("§7§l⟨ §8Page précédente"));
@@ -123,13 +126,15 @@ public class HeadMenu implements Listener {
         if (slot == PREV_BUTTON_SLOT) {
             int currentPage = playerPages.getOrDefault(player.getUniqueId(), 1);
             if (currentPage > 1) {
+                player.closeInventory();
                 open(player, currentPage - 1);
             }
         } else if (slot == NEXT_BUTTON_SLOT) {
             int currentPage = playerPages.getOrDefault(player.getUniqueId(), 1);
             Inventory inventory = event.getView().getTopInventory();
             ItemStack nextButton = inventory.getItem(NEXT_BUTTON_SLOT);
-            if (nextButton != null && nextButton.getType() != Material.STAINED_GLASS_PANE) {
+            if (nextButton != null && nextButton.getDurability() == 5) {
+                player.closeInventory();
                 open(player, currentPage + 1);
             }
         } else if (slot < HEAD_SLOTS) {
@@ -160,12 +165,24 @@ public class HeadMenu implements Listener {
         event.setCancelled(true);
     }
 
-    private ItemStack createNavigationButton(String name) {
+    private ItemStack createNextNavigationButton() {
+        return createNavigationButton("§aPage suivante §l⟩", "➡");
+    }
+
+    private ItemStack createPreviousNavigationButton() {
+        return createNavigationButton("§a§l⟨ §aPage précédente", "⬅");
+
+    }
+
+    private ItemStack createNavigationButton(String name, String emoji) {
         ItemStack button = new ItemStack(Material.STAINED_GLASS_PANE, 1, (short) 5);
         ItemMeta meta = button.getItemMeta();
         meta.setDisplayName(name);
         button.setItemMeta(meta);
-        return button;
+        NBTItem nbtItem = new NBTItem(button);
+        nbtItem.mergeCompound(
+                new NBTContainer("{PacDisplay: {Scale: 0.8,Sprite: \"EMOJI\", SpriteData: \"\uEEEE" + emoji + "\"}}"));
+        return nbtItem.getItem();
     }
 
     private ItemStack createDisabledButton(String name) {

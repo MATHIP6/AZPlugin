@@ -16,7 +16,7 @@ import fr.mathip.azplugin.bukkit.config.ConfigManager;
 
 public class HeadApiClient {
 
-    private static final int PER_PAGE = 20;
+    private static final int PER_PAGE = 27;
 
     public CompletableFuture<HeadApiResponse> fetchHeads(int page) {
         return CompletableFuture.supplyAsync(() -> {
